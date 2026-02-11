@@ -1,32 +1,34 @@
 import { useState } from 'react'
+import { useCategories } from '../categories/useCategories'
 
 type Props = {
   onAdd: (
     amount: number,
-    category: string,
+    categoryId: string,
     occurredAt: string,
     note?: string
   ) => void
 }
 
 export function AddTransaction({ onAdd }: Props) {
+  const { categories } = useCategories()
   const [amount, setAmount] = useState('')
-  const [category, setCategory] = useState('')
+  const [categoryId, setCategoryId] = useState('')
   const [date, setDate] = useState('')
   const [note, setNote] = useState('')
 
   const submit = () => {
-    if (!amount || !category || !date) return
+    if (!amount || !categoryId || !date) return
 
     onAdd(
       Number(amount),
-      category,
+      categoryId,
       date,
       note || undefined
     )
 
     setAmount('')
-    setCategory('')
+    setCategoryId('')
     setDate('')
     setNote('')
   }
@@ -42,11 +44,17 @@ export function AddTransaction({ onAdd }: Props) {
         onChange={e => setAmount(e.target.value)}
       />
 
-      <input
-        placeholder="Category"
-        value={category}
-        onChange={e => setCategory(e.target.value)}
-      />
+      <select
+        value={categoryId}
+        onChange={e => setCategoryId(e.target.value)}
+      >
+        <option value="">Select category</option>
+        {categories.map(c => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
 
       <input
         type="date"

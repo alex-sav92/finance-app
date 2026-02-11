@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabaseClient'
 export type Transaction = {
   id: string
   amount: number
-  category: string
+  category_id: string
   occurred_at: string
   note: string | null
 }
@@ -19,7 +19,7 @@ export function useTransactions(accountId: string | null) {
     setLoading(true)
     const { data, error } = await supabase
       .from('transactions')
-      .select('id, amount, category, occurred_at, note')
+      .select('id, amount, category_id, occurred_at, note')
       .eq('account_id', accountId)
       .order('occurred_at', { ascending: false })
 
@@ -33,10 +33,10 @@ export function useTransactions(accountId: string | null) {
 
   const addTransaction = async (
     amount: number,
-    category: string,
+    categoryId: string,
     occurredAt: string,
     note?: string
-  ) => {
+  ) => {``
     const {
       data: { user }
     } = await supabase.auth.getUser()
@@ -47,7 +47,7 @@ export function useTransactions(accountId: string | null) {
       user_id: user.id,
       account_id: accountId,
       amount,
-      category,
+      category_id: categoryId,
       occurred_at: occurredAt,
       note
     })
