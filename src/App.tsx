@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabaseClient'
 import { Layout } from './components/Layout'
-import { Login } from './auth/login'
+import { Login } from './auth/Login'
+import { AccountsList } from './features/accounts/AccountsList'
+import { TransactionsList } from './features/transactions/TransactionsList'
 
 function App() {
   const [user, setUser] = useState<any>(null)
-
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null)
   const loadUser = async () => {
     const { data } = await supabase.auth.getUser()
     setUser(data.user)
@@ -28,6 +30,14 @@ function App() {
         <>
           <p>Logged in as {user.email}</p>
           <button onClick={signOut}>Sign out</button>
+
+          <hr />
+
+          <AccountsList onSelect={setSelectedAccountId} />
+
+          <hr />
+
+          <TransactionsList accountId={selectedAccountId} />
         </>
       )}
     </Layout>
