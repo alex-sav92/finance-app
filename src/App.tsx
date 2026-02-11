@@ -4,6 +4,7 @@ import { Layout } from './components/Layout'
 import { Login } from './auth/Login'
 import { AccountsList } from './features/accounts/AccountsList'
 import { TransactionsList } from './features/transactions/TransactionsList'
+import { AccountSummary } from './features/accounts/AccountSummary'
 
 function App() {
   const [user, setUser] = useState<any>(null)
@@ -38,6 +39,8 @@ function App() {
           <hr />
 
           <TransactionsList accountId={selectedAccountId} />
+
+          <AccountSummary accountId={selectedAccountId} />
         </>
       )}
     </Layout>
