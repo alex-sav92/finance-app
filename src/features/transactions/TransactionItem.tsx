@@ -50,13 +50,13 @@ export function TransactionItem({ tx, onUpdate, onDelete }: Props) {
             />
             <button
               onClick={handleSave}
-              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               Save
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+              className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
             >
               Cancel
             </button>
@@ -64,17 +64,17 @@ export function TransactionItem({ tx, onUpdate, onDelete }: Props) {
         ) : (
           <>
             <div className={`font-semibold ${tx.amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {tx.amount} €
+              {tx.amount} 
             </div>
             <button
               onClick={() => setEditing(true)}
-              className="text-blue-600 hover:underline"
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
               Edit
             </button>
             <button
               onClick={() => onDelete(tx.id)}
-              className="text-red-600 hover:underline"
+              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
             >
               Delete
             </button>
