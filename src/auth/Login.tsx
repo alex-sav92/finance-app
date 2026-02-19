@@ -43,7 +43,8 @@ export function Login({ onLogin }: Props) {
 
       <br />
 
-      <button onClick={signIn}>Sign in</button>
+      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" 
+        onClick={signIn}>Sign in</button>
     </div>
   )
 }

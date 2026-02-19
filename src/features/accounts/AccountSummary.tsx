@@ -13,9 +13,12 @@ export function AccountSummary({ accountId }: Props) {
   return (
     <div>
       <h3>Account Summary</h3>
-      <p>
-        <strong>Current Balance:</strong> {balance.toFixed(2)}
-      </p>
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-xl shadow">
+        <div className="text-sm opacity-80">Current Balance</div>
+        <div className="text-3xl font-bold mt-2">
+          € 2,430
+        </div>
+</div>
 
       {summary.length ? (
         <>

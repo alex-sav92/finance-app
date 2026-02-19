@@ -35,6 +35,14 @@ export function useAccountSummary(accountId: string | null) {
       totalBalance += Number(tx.amount)
     })
 
+    // let cumulative = 0
+    // const cumulativeData = Object.entries(totalsPerMonth)
+    //     .sort(([a], [b]) => a.localeCompare(b))
+    //     .map(([month, total]) => {
+    //         cumulative += total
+    //         return { month, total, cumulative }
+    // })
+
     const summaryArray = Object.entries(totalsPerMonth)
       .map(([month, total]) => ({ month, total }))
       .sort((a, b) => a.month.localeCompare(b.month))

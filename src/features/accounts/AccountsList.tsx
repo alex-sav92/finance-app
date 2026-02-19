@@ -1,40 +1,53 @@
-import { useState } from 'react'
 import { useAccounts } from './useAccounts'
-type Props = {
-  onSelect: (accountId: string) => void
-}
-export function AccountsList({ onSelect }: Props) {
-  const { accounts, loading, addAccount } = useAccounts()
-  const [name, setName] = useState('')
 
-  const onAdd = () => {
-    if (!name.trim()) return
-    addAccount(name.trim())
-    setName('')
+type Props = {
+  selectedAccountId: string | null
+  onSelect: (id: string) => void
+}
+
+export function AccountsList({ selectedAccountId, onSelect }: Props) {
+  const { accounts, loading } = useAccounts()
+
+  if (loading) {
+    return (
+      <div className="text-gray-500">
+        Loading accounts...
+      </div>
+    )
+  }
+
+  if (!accounts.length) {
+    return (
+      <div className="text-gray-500">
+        No accounts found
+      </div>
+    )
   }
 
   return (
-    <div>
-      <h2>Accounts</h2>
+    <div className="space-y-2">
+      {accounts.map(acc => {
+        const isSelected = acc.id === selectedAccountId
 
-      <input
-        placeholder="Account name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
-      <button onClick={onAdd}>Add</button>
-
-      {loading && <p>Loading...</p>}
-
-      <ul>
-        {accounts.map(acc => (
-          <li key={acc.id}>
-            <button onClick={() => onSelect(acc.id)}>
-                {acc.name} ({acc.currency})
-            </button>
-          </li>
-        ))}
-      </ul>
+        return (
+          <button
+            key={acc.id}
+            onClick={() => onSelect(acc.id)}
+            className={`
+              w-full text-left px-3 py-2 rounded-lg transition
+              ${
+                isSelected
+                  ? 'bg-blue-600 text-white'
+                  : 'hover:bg-gray-100'
+              }
+            `}
+          >
+            <div className="font-medium">
+              {acc.name}
+            </div>
+          </button>
+        )
+      })}
     </div>
   )
 }
