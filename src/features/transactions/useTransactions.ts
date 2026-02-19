@@ -1,6 +1,24 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-
+type TransactionFromDb = {
+      id: string
+      amount: number
+      occurred_at: string
+      note?: string
+      category_id: string
+      categories: { id: string; name: string }[]
+      account_id: string
+    }
+    export type Transaction = {
+  id: string
+  account_id: string
+  amount: number
+  occurred_at: string
+  note?: string
+  category_id: string
+  category_name: string
+  categories: { id: string; name: string }[]
+}
 export function useTransactions(accountId: string | null) {
   const [transactions, setTransactions] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -8,31 +26,34 @@ export function useTransactions(accountId: string | null) {
   const fetchTransactions = async () => {
     if (!accountId) return
     setLoading(true)
-
-    const { data, error } = await supabase
-      .from('transactions')
-      .select(`
-        id,
-        amount,
-        occurred_at,
-        note,
-        category_id,
-        categories (id, name)
-      `)
-      .eq('account_id', accountId)
-      .order('occurred_at', { ascending: false })
+    
+const { data, error } = await supabase
+  .from('transactions') // <-- table name as string literal
+  .select(`
+    id,
+    account_id,
+    amount,
+    occurred_at,
+    note,
+    category_id,
+    categories!inner (id, name)
+  `)
+  .eq('account_id', accountId)
+  .order('occurred_at', { ascending: false })
 
     if (error) {
       console.error('Error fetching transactions:', error)
       setLoading(false)
       return
     }
+    const typedData: TransactionFromDb[] = data ?? []
 
-    // Flatten category name for easier access
-    const flattened = data?.map(tx => ({
+    const flattened: Transaction[] = typedData?.map(tx => ({
       ...tx,
-      category_name: tx.categories?.[0]?.name ?? 'Uncategorized'
+      category_name: tx.categories[0]?.name ?? 'Uncategorized'
     })) ?? []
+
+    console.log("Flattened::", flattened)
 
     setTransactions(flattened)
     setLoading(false)

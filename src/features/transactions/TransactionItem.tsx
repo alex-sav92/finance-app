@@ -6,7 +6,7 @@ export type Transaction = {
   note?: string
   occurred_at: string
   category_id: string
-  category_name: string // flattened from useTransactions
+  categories: { id: string; name: string }
 }
 
 type Props = {
@@ -28,7 +28,7 @@ export function TransactionItem({ tx, onUpdate, onDelete }: Props) {
   return (
     <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
       <div>
-        <div className="font-medium">{tx.category_name}</div>
+        <div className="font-medium">{tx.categories.name}</div>
         <div className="text-sm text-gray-500">{tx.occurred_at}</div>
       </div>
 
