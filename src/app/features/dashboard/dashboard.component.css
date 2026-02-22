@@ -1,0 +1,19 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  background: #f5f7fa;
+}
+
+.income {
+  background: #e6f7ec;
+}
+
+.expense {
+  background: #fdeaea;
+}
