@@ -1,8 +1,8 @@
 // src/app/core/session.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from '@supabase/supabase-js';
 import { supabase } from './supabase.client';
+import { User } from '@supabase/supabase-js';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,12 @@ export class SessionService {
   user$ = this.userSubject.asObservable();
 
   constructor() {
-    supabase.auth.getUser().then(({ data }) => this.userSubject.next(data.user));
+    // Get initial user on app start
+    supabase.auth.getUser().then(({ data }) => {
+      this.userSubject.next(data.user ?? null);
+    });
+
+    // Listen to auth state changes
     supabase.auth.onAuthStateChange((_event, session) => {
       this.userSubject.next(session?.user ?? null);
     });

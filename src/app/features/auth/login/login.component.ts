@@ -1,11 +1,21 @@
+// src/app/features/auth/login/login.component.ts
 import { Component } from '@angular/core';
-import { AuthService } from '../../../core/auth.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../core/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  imports: [FormsModule]
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  template: `
+    <div class="login-form">
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" [(ngModel)]="email" />
+      <button (click)="submit()">Send Magic Link</button>
+      <p>{{ message }}</p>
+    </div>
+  `,
 })
 export class LoginComponent {
   email: string = '';
