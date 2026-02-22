@@ -89,6 +89,10 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          // ng deploy --base-href=/REPO_NAME/
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
