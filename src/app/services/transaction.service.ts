@@ -24,8 +24,6 @@ export class TransactionService {
 
     if (error) throw error;
 
-    console.log('Loaded transactions:', data);
-
     return data ?? [];
   }
 
