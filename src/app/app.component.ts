@@ -6,9 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { SessionService } from './core/session.service';
 import { LoginComponent } from './features/auth/login/login.component';
 import { AddTransactionComponent } from './features/transactions/add-transaction/add-transaction.component';
-import { TransactionsListComponent } from './features/transactions/transaction-list/transaction-list.component';
+import { TransactionListComponent } from './features/transactions/transaction-list/transaction-list.component';
 import { AccountsListComponent } from './features/accounts/accounts-list/accounts-list.component';
 import { DashboardComponent } from "./features/dashboard/dashboard.component";
+import { HeaderComponent } from "./header/header.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,21 +17,19 @@ import { DashboardComponent } from "./features/dashboard/dashboard.component";
     CommonModule,
     LoginComponent,
     AccountsListComponent,
-    TransactionsListComponent,
+    TransactionListComponent,
     AddTransactionComponent,
-    DashboardComponent
+    DashboardComponent,
+    HeaderComponent
 ],
   template: `
     <div *ngIf="user; else loginTemplate">
-      <header>
-        <span>{{ user.email }}</span>
-        <button (click)="logout()">Logout</button>
-      </header>
+      <app-header></app-header>
 
       <app-accounts-list></app-accounts-list>
       <app-add-transaction></app-add-transaction>
       <app-dashboard></app-dashboard>
-      <app-transactions-list></app-transactions-list>
+      <app-transaction-list></app-transaction-list>
     </div>
 
     <ng-template #loginTemplate>

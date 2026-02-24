@@ -1,0 +1,22 @@
+<header class="header">
+
+  <div class="logo">
+    💰 Finance Tracker
+  </div>
+
+  <nav class="nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/transactions">Transactions</a>
+    <a routerLink="/accounts">Accounts</a>
+  </nav>
+    <div class="user-section">
+
+    <span class="email" *ngIf="loggedUser">
+      {{ loggedUser }}
+    </span>
+
+    <button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+  </div>
+</header>

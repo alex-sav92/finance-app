@@ -1,33 +1,67 @@
-// src/app/features/transactions/transactions-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe, NgFor } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
 
 @Component({
-  selector: 'app-transactions-list',
+  selector: 'app-transaction-list',
   standalone: true,
   imports: [CommonModule],
+  styleUrls: ['./transaction-list.component.css'],
   template: `
-    <h3>Transactions</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Category</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tx of transactions">
-          <td>{{ tx.occurred_at | date:'shortDate' }}</td>
-          <td>{{ tx.categories.name ?? 'Uncategorized' }}</td>
-          <td>{{ tx.amount }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="page">
+
+  <h2>Transactions</h2>
+
+  <div class="tx-card"
+       *ngFor="let tx of transactions">
+
+    <div class="tx-left">
+
+      <div class="tx-title">
+        {{ tx.description || 'No description' }}
+      </div>
+
+      <div class="tx-meta">
+        {{ tx.categories?.name || 'Uncategorized' }}
+        •
+        {{ tx.accounts?.name }}
+        •
+        {{ tx.date | date:'mediumDate' }}
+      </div>
+
+    </div>
+
+    <div class="tx-right">
+
+      <div
+        class="amount"
+        [class.income]="tx.type === 'income'"
+        [class.expense]="tx.type === 'expense'">
+
+        {{ tx.type === 'expense' ? '-' : '+' }}
+        {{ tx.amount | currency }}
+
+      </div>
+
+      <div class="actions">
+        <button (click)="editTransaction(tx)">Edit</button>
+        <button class="delete" (click)="deleteTransaction(tx.id)">Delete</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
   `,
 })
-export class TransactionsListComponent implements OnInit {
+export class TransactionListComponent implements OnInit {
+deleteTransaction(arg0: any) {
+throw new Error('Method not implemented.');
+}
+editTransaction(_t5: any) {
+throw new Error('Method not implemented.');
+}
   transactions: any = [];
 
   constructor(private transactionService: TransactionService) {}
