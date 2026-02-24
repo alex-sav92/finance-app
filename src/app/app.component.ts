@@ -8,6 +8,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { AddTransactionComponent } from './features/transactions/add-transaction/add-transaction.component';
 import { TransactionsListComponent } from './features/transactions/transaction-list/transaction-list.component';
 import { AccountsListComponent } from './features/accounts/accounts-list/accounts-list.component';
+import { DashboardComponent } from "./features/dashboard/dashboard.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,7 +18,8 @@ import { AccountsListComponent } from './features/accounts/accounts-list/account
     AccountsListComponent,
     TransactionsListComponent,
     AddTransactionComponent,
-  ],
+    DashboardComponent
+],
   template: `
     <div *ngIf="user; else loginTemplate">
       <header>
@@ -28,6 +30,7 @@ import { AccountsListComponent } from './features/accounts/accounts-list/account
       <app-accounts-list></app-accounts-list>
       <app-transactions-list></app-transactions-list>
       <app-add-transaction></app-add-transaction>
+      <app-dashboard></app-dashboard>
     </div>
 
     <ng-template #loginTemplate>
