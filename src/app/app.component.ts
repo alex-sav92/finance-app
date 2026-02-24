@@ -16,7 +16,6 @@ import { HeaderComponent } from "./header/header.component";
   imports: [
     CommonModule,
     LoginComponent,
-    AccountsListComponent,
     TransactionListComponent,
     AddTransactionComponent,
     DashboardComponent,
@@ -26,7 +25,7 @@ import { HeaderComponent } from "./header/header.component";
     <div *ngIf="user; else loginTemplate">
       <app-header></app-header>
 
-      <app-accounts-list></app-accounts-list>
+      <!-- <app-accounts-list></app-accounts-list> -->
       <app-add-transaction></app-add-transaction>
       <app-dashboard></app-dashboard>
       <app-transaction-list></app-transaction-list>
