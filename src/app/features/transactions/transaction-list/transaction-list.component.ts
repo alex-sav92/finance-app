@@ -18,15 +18,15 @@ import { TransactionService } from '../../../services/transaction.service';
     <div class="tx-left">
 
       <div class="tx-title">
-        {{ tx.description || 'No description' }}
+        {{ tx.categories?.name || 'Uncategorized' }}
       </div>
 
       <div class="tx-meta">
-        {{ tx.categories?.name || 'Uncategorized' }}
-        •
         {{ tx.accounts?.name }}
         •
-        {{ tx.date | date:'mediumDate' }}
+        {{ tx.description || 'No description' }}
+        •
+        {{ tx.occurred_at | date:'mediumDate' }}
       </div>
 
     </div>
@@ -38,8 +38,8 @@ import { TransactionService } from '../../../services/transaction.service';
         [class.income]="tx.type === 'income'"
         [class.expense]="tx.type === 'expense'">
 
-        {{ tx.type === 'expense' ? '-' : '+' }}
-        {{ tx.amount | currency }}
+        <!-- {{ tx.type === 'expense' ? '-' : '+' }} -->
+        {{ tx.amount | currency: 'RON' }}
 
       </div>
 
