@@ -28,9 +28,9 @@ import { DashboardComponent } from "./features/dashboard/dashboard.component";
       </header>
 
       <app-accounts-list></app-accounts-list>
-      <app-transactions-list></app-transactions-list>
       <app-add-transaction></app-add-transaction>
       <app-dashboard></app-dashboard>
+      <app-transactions-list></app-transactions-list>
     </div>
 
     <ng-template #loginTemplate>

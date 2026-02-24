@@ -9,7 +9,7 @@ export interface Account {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AccountService {
   async getAccounts() {
