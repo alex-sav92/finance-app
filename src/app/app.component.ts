@@ -10,6 +10,7 @@ import { TransactionListComponent } from './features/transactions/transaction-li
 import { AccountsListComponent } from './features/accounts/accounts-list/accounts-list.component';
 import { DashboardComponent } from "./features/dashboard/dashboard.component";
 import { HeaderComponent } from "./header/header.component";
+import { AuthService } from './core/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -23,8 +24,7 @@ import { HeaderComponent } from "./header/header.component";
 ],
   template: `
     <div *ngIf="user; else loginTemplate">
-      <app-header></app-header>
-
+      <app-header *ngIf="user"></app-header>
       <!-- <app-accounts-list></app-accounts-list> -->
       <app-add-transaction></app-add-transaction>
       <app-dashboard></app-dashboard>
@@ -39,8 +39,12 @@ import { HeaderComponent } from "./header/header.component";
 export class AppComponent {
   user: any;
 
-  constructor(private session: SessionService) {
+  constructor(private session: SessionService, private auth: AuthService) {
     this.session.user$.subscribe(u => (this.user = u));
+  }
+
+  async ngOnInit() {
+    this.user = await this.auth.getUser();
   }
 
   logout() {

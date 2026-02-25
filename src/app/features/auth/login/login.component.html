@@ -1,6 +1,33 @@
-<div>
+<!-- <div>
   <h2>Login</h2>
 <input type="email" [(ngModel)]="email" placeholder="Email" />
   <button (click)="submit()">Send Magic Link</button>
   <p>{{ message }}</p>
+</div> -->
+<div class="login-card">
+
+  <h2>Login</h2>
+
+  <input
+    type="email"
+    placeholder="Email"
+    [(ngModel)]="email">
+
+  <input
+    type="password"
+    placeholder="Password"
+    [(ngModel)]="password">
+<!-- <button class="secondary" (click)="register()">
+  Create account
+</button> -->
+  <button (click)="login()" [disabled]="loading">
+
+    {{ loading ? 'Signing in...' : 'Login' }}
+
+  </button>
+
+  <p class="error" *ngIf="error">
+    {{ error }}
+  </p>
+
 </div>

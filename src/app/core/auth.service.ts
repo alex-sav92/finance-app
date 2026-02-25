@@ -7,9 +7,15 @@ import { supabase } from './supabase.client';
 })
 export class AuthService {
  
-  async login(email: string) {
-    const { data, error } = await supabase.auth.signInWithOtp({ email });
+  async login(email: string, password: string) {
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
     if (error) throw error;
+
     return data;
   }
    async getUser() {
@@ -19,5 +25,16 @@ export class AuthService {
 
   async logout() {
     await supabase.auth.signOut();
+  }
+  async register(email: string, password: string) {
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    return data;
   }
 }
