@@ -8,31 +8,43 @@ import { AuthService } from '../../../core/auth.service';
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
-    <div class="login-card">
+  <div class="card">
 
-      <h2>Login</h2>
+    <h2>Login</h2>
+    <div class="form-grid">
+    <form (ngSubmit)="login()" class="form">
 
-      <input
-        type="email"
-        placeholder="Email"
-        [(ngModel)]="email">
+      <div class="field">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password">
+      <div class="field">
+        <label>Password</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
 
-      <button (click)="login()" [disabled]="loading">
-
-        {{ loading ? 'Signing in...' : 'Login' }}
-
+      <button type="submit" class="primary-btn">
+        Login
       </button>
-
-      <p class="error" *ngIf="error">
+       <p class="error" *ngIf="error">
         {{ error }}
       </p>
+
+    </form>
   </div>
-  `,
+</div>
+ `,
 })
 export class LoginComponent {
   message: string = '';
