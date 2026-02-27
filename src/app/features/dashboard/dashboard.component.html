@@ -19,42 +19,16 @@
 </div>
 
 <div class="charts">
-<!-- 
-  <div class="chart-card">
-    <h3>Monthly Overview</h3>
-
-    <canvas
-      baseChart
-      [data]="{
-        labels: monthlyLabels,
-        datasets: [
-          { data: monthlyIncome, label: 'Income' },
-          { data: monthlyExpenses, label: 'Expenses' }
-        ]
-      }"
-      chartType="bar">
-    </canvas>
-
-  </div> -->
-
   <div class="chart-card">
     <h3>Expenses by Category</h3>
-
     <canvas
       baseChart
-      [data]="{
-        labels: categoryLabels,
-        datasets: [
-          { 
-            data: categoryData,
-            backgroundColor: categoryColors
-          }
-        ]
-      }"
-      chartType="pie">
+      [data]="pieChartData"
+      [type]="pieChartType">
     </canvas>
 
   </div>
 
-</div>
+  </div>
+
 </div>
