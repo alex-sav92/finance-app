@@ -2,8 +2,8 @@
 <div class="grid">
 
   <div class="card">
-    <h3>Total Balance</h3>
-    <p>{{ totalBalance | currency: 'RON' }}</p>
+    <h3>Balance this month</h3>
+    <p>{{ income - expenses | currency: 'RON' }}</p>
   </div>
 
   <div class="card income">
