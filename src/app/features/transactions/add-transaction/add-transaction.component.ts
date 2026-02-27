@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../../services/account.service';
 import { CategoriesService } from '../../categories/categories.service';
 import { TransactionService } from '../../../services/transaction.service';
+import { AuthService } from '../../../core/auth.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -22,8 +23,8 @@ export class AddTransactionComponent implements OnInit {
   type: string = 'expense';
   accountId: string = '';
   categoryId: string = '';
-  description: string = '';
-  date: string = new Date().toISOString().substring(0, 10);
+  note: string = '';
+  occurred_at: string = new Date().toISOString().substring(0, 10);
 
   loading = false;
   message = '';
@@ -31,7 +32,8 @@ export class AddTransactionComponent implements OnInit {
   constructor(
     private accountsService: AccountService,
     private categoriesService: CategoriesService,
-    private transactionsService: TransactionService
+    private transactionsService: TransactionService,
+    private authservice: AuthService
   ) {}
 
   async ngOnInit() {
@@ -50,15 +52,15 @@ export class AddTransactionComponent implements OnInit {
     this.message = '';
 
     try {
-
       await this.transactionsService.createTransaction({
         amount: this.amount,
         type: this.type,
         account_id: this.accountId,
         category_id: this.categoryId || null,
-        description: this.description,
-        date: this.date
-      });
+        note: this.note || null,
+        occurred_at: this.occurred_at,
+        user_id: await this.authservice.getCurrentUserId()
+      })
 
       this.message = 'Transaction added ✅';
 
@@ -73,7 +75,7 @@ export class AddTransactionComponent implements OnInit {
 
   resetForm() {
     this.amount = null;
-    this.description = '';
+    this.note = '';
     this.categoryId = '';
   }
 

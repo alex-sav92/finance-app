@@ -23,6 +23,11 @@ export class AuthService {
     return data.user;
   }
 
+  async getCurrentUserId() {
+    const user = await this.getUser();
+    return user?.id;
+  }
+
   async logout() {
     await supabase.auth.signOut();
   }
