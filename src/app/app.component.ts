@@ -2,33 +2,25 @@
 // src/app/features/transactions/add-transaction.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { SessionService } from './core/session.service';
 import { LoginComponent } from './features/auth/login/login.component';
-import { AddTransactionComponent } from './features/transactions/add-transaction/add-transaction.component';
-import { TransactionListComponent } from './features/transactions/transaction-list/transaction-list.component';
-import { AccountsListComponent } from './features/accounts/accounts-list/accounts-list.component';
-import { DashboardComponent } from "./features/dashboard/dashboard.component";
 import { HeaderComponent } from "./header/header.component";
 import { AuthService } from './core/auth.service';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
     LoginComponent,
-    TransactionListComponent,
-    AddTransactionComponent,
-    DashboardComponent,
-    HeaderComponent
+    HeaderComponent,
+    RouterOutlet
 ],
   template: `
     <div *ngIf="user; else loginTemplate">
       <app-header *ngIf="user"></app-header>
-      <!-- <app-accounts-list></app-accounts-list> -->
-      <app-add-transaction></app-add-transaction>
-      <app-dashboard></app-dashboard>
-      <app-transaction-list></app-transaction-list>
+      
+      <router-outlet></router-outlet>
     </div>
 
     <ng-template #loginTemplate>
