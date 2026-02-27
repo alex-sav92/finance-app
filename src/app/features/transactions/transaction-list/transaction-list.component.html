@@ -29,8 +29,8 @@
         [class.expense]="tx.type === 'expense'">
 
         {{ tx.type === 'expense' ? '-' : '+' }}
-        {{ tx.amount | currency }}
-
+        {{ tx.amount | currency: 'RON' }}
+      
       </div>
 
       <div class="actions">

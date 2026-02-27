@@ -11,13 +11,13 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-.income {
+/* .income {
   border-left: 5px solid #22c55e;
 }
 
 .expense {
   border-left: 5px solid #ef4444;
-}
+} */
 
 .grid {
   display: grid;

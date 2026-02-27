@@ -38,7 +38,7 @@ import { TransactionService } from '../../../services/transaction.service';
         [class.income]="tx.type === 'income'"
         [class.expense]="tx.type === 'expense'">
 
-        <!-- {{ tx.type === 'expense' ? '-' : '+' }} -->
+        {{ tx.type === 'expense' ? '-' : '+' }}
         {{ tx.amount | currency: 'RON' }}
 
       </div>
