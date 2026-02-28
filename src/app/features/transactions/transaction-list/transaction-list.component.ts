@@ -44,7 +44,7 @@ import { TransactionService } from '../../../services/transaction.service';
       </div>
 
       <div class="actions">
-        <button (click)="editTransaction(tx)">Edit</button>
+        <!-- <button (click)="editTransaction(tx)">Edit</button> -->
         <button class="delete" (click)="deleteTransaction(tx.id)">Delete</button>
       </div>
 
