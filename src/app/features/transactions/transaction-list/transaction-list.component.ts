@@ -56,9 +56,7 @@ import { TransactionService } from '../../../services/transaction.service';
   `,
 })
 export class TransactionListComponent implements OnInit {
-deleteTransaction(arg0: any) {
-throw new Error('Method not implemented.');
-}
+
 editTransaction(_t5: any) {
 throw new Error('Method not implemented.');
 }
@@ -69,4 +67,13 @@ throw new Error('Method not implemented.');
   async ngOnInit() {
     this.transactions = await this.transactionService.getTransactions();
   }
+
+  async deleteTransaction(id: any) {
+    if (!confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+    await this.transactionService.deleteTransaction(id);
+    this.transactions = this.transactions.filter((tx: any) => tx.id !== id);
+  }
+
 }
