@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
   totalBalance = 0;
   income = 0;
   expenses = 0;
+  categoryPercentages: number[] = [];
 
   constructor(
     private accountsService: AccountService,
@@ -99,6 +100,9 @@ export class DashboardComponent implements OnInit {
 
     this.categoryLabels = Object.keys(categoryMap);
     this.categoryData = Object.values(categoryMap);
+
+    const sumSpending = this.categoryData.reduce((a, b) => a + b, 0);
+    this.categoryPercentages = this.categoryData.map(d => (d / sumSpending) * 100);
     
     this.categoryColors = [
       '#ef4444',

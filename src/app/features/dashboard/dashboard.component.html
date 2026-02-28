@@ -1,34 +1,38 @@
 <div class="page">
-<div class="grid">
+  <div class="grid">
 
-  <div class="card">
-    <h3>Balance this month</h3>
-    <p>{{ income - expenses | currency: 'RON' }}</p>
+    <div class="card">
+      <h3>Balance this month</h3>
+      <p>{{ income - expenses | currency: 'RON' }}</p>
+    </div>
+
+    <div class="card income">
+      <h3>Income</h3>
+      <p>{{ income | currency: 'RON' }}</p>
+    </div>
+
+    <div class="card expense">
+      <h3>Expenses</h3>
+      <p>{{ expenses | currency: 'RON' }}</p>
+    </div>
   </div>
 
-  <div class="card income">
-    <h3>Income</h3>
-    <p>{{ income | currency: 'RON' }}</p>
+  <div class="charts grid">
+    <div class="chart-card">
+      <h3>Expenses by Category</h3>
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [type]="pieChartType">
+      </canvas>
+    </div>
+    <div class="card">
+      <h3>Percents out of total spending:</h3>
+      <ul>
+        <li *ngFor="let pct of categoryPercentages; let i = index">
+          {{ pct.toFixed(2) }}% {{ categoryLabels[i] }} 
+        </li>
+      </ul>
+    </div>
   </div>
-
-  <div class="card expense">
-    <h3>Expenses</h3>
-    <p>{{ expenses | currency: 'RON' }}</p>
-  </div>
-
-</div>
-
-<div class="charts">
-  <div class="chart-card">
-    <h3>Expenses by Category</h3>
-    <canvas
-      baseChart
-      [data]="pieChartData"
-      [type]="pieChartType">
-    </canvas>
-
-  </div>
-
-  </div>
-
 </div>
