@@ -7,14 +7,14 @@ import { AuthService } from '../../../core/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, CommonModule],
+  styleUrls: ['./login.component.css'],
   template: `
   <div class="card">
 
     <h2>Login</h2>
     <div class="form-grid">
     <form (ngSubmit)="login()" class="form">
-
-      <div class="field">
+      <div class="form-group">
         <label>Email</label>
         <input
           type="email"
@@ -24,7 +24,7 @@ import { AuthService } from '../../../core/auth.service';
         />
       </div>
 
-      <div class="field">
+      <div class="form-group">
         <label>Password</label>
         <input
           type="password"
@@ -37,10 +37,10 @@ import { AuthService } from '../../../core/auth.service';
       <button type="submit" class="primary-btn">
         Login
       </button>
-       <p class="error" *ngIf="error">
+      <p class="error" *ngIf="error">
         {{ error }}
       </p>
-
+      
     </form>
   </div>
 </div>
