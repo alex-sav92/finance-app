@@ -23,7 +23,7 @@
 
     <div class="field">
       <label>Account</label>
-      <select [(ngModel)]="accountId">
+      <select [(ngModel)]="selectedAccountId">
         <option value="">Select account</option>
         <option *ngFor="let acc of accounts" [value]="acc.id">
           {{ acc.name }}
