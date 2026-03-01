@@ -11,43 +11,12 @@ import { FormsModule } from '@angular/forms';
   providers: [AccountService],
   styleUrls: ['./accounts-list.component.css'],
   template: `
-      <!-- <h3>Accounts</h3>
+      <h3>Accounts</h3>
       <ul>
         <li *ngFor="let acc of accounts">
           {{ acc.name }} 
         </li>
-      </ul> -->
-      <div class="page">
-    
-      <h3>Settings and preferences</h3>
-      <label class="checkbox-container">
-        <input
-          type="checkbox"
-          [(ngModel)]="showBalance"
-          name="showBalance"
-        />
-        <span class="custom-checkbox"></span>
-        Show Balance
-      </label>
-      <label class="checkbox-container">
-        <input
-          type="checkbox"
-          [(ngModel)]="showInsights"
-          name="showInsights"
-        />
-        <span class="custom-checkbox"></span>
-        Show Insights
-      </label>
-      <label class="checkbox-container">
-        <input
-          type="checkbox"
-          [(ngModel)]="setDefaultCategory"
-          name="setDefaultCategory"
-        />
-        <span class="custom-checkbox"></span>
-        Set Default Category
-      </label>
-    </div>
+      </ul>
   `,
 })
 export class AccountsListComponent implements OnInit {

@@ -7,6 +7,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { HeaderComponent } from "./header/header.component";
 import { AuthService } from './core/auth.service';
 import { RouterOutlet } from '@angular/router';
+import { PreferencesService } from './services/preferences.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -31,12 +32,20 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {
   user: any;
 
-  constructor(private session: SessionService, private auth: AuthService) {
+  constructor(private session: SessionService, private auth: AuthService, private preferencesService: PreferencesService) {
     this.session.user$.subscribe(u => (this.user = u));
   }
 
   async ngOnInit() {
     this.user = await this.auth.getUser();
+    this.loadPreferences();
+  }
+
+  async loadPreferences() {
+    const { data } = await this.preferencesService.getPreferences();
+    if (data?.dark_mode) {
+      document.body.classList.add('dark-mode');
+    }
   }
 
   logout() {

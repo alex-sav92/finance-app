@@ -4,6 +4,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { AccountsListComponent } from './features/accounts/accounts-list/accounts-list.component';
 import { TransactionListComponent } from './features/transactions/transaction-list/transaction-list.component';
 import { AddTransactionComponent } from './features/transactions/add-transaction/add-transaction.component';
+import { PreferencesComponent } from './features/preferences/preferences.component';
 
 export const routes: Routes = [
   { path: '', component: AddTransactionComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'accounts', component: AccountsListComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'preferences', component: PreferencesComponent}
 ];

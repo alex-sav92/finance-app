@@ -4,11 +4,13 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartType } from 'chart.js';
+import { UserCurrencyPipe } from '../../user-currency.pipe';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   providers: [AccountService, TransactionService],
-  imports: [CommonModule, NgChartsModule],
+  imports: [CommonModule, NgChartsModule, UserCurrencyPipe],
   styleUrls: ['./dashboard.component.css']   // <-- IMPORTANT
 })
 export class DashboardComponent implements OnInit {
@@ -103,7 +105,7 @@ export class DashboardComponent implements OnInit {
 
     const sumSpending = this.categoryData.reduce((a, b) => a + b, 0);
     this.categoryPercentages = this.categoryData.map(d => (d / sumSpending) * 100);
-    
+
     this.categoryColors = [
       '#ef4444',
       '#f97316', 

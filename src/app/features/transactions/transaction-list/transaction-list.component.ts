@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
+import { UserCurrencyPipe } from '../../../user-currency.pipe';
 
 @Component({
   selector: 'app-transaction-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UserCurrencyPipe],
   styleUrls: ['./transaction-list.component.css'],
   template: `
     <div class="page">
@@ -39,7 +40,7 @@ import { TransactionService } from '../../../services/transaction.service';
         [class.expense]="tx.type === 'expense'">
 
         {{ tx.type === 'expense' ? '-' : '+' }}
-        {{ tx.amount | currency: 'RON' }}
+        {{ tx.amount | userCurrency }}
 
       </div>
 

@@ -3,7 +3,10 @@ body {
   font-family: Inter, system-ui, sans-serif;
   background: #f1f5f9;
 }
-
+body.dark {
+  background: #111827;
+  color: white;
+}
 .card {
   background: white;
   border-radius: 16px;
@@ -11,13 +14,6 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-/* .income {
-  border-left: 5px solid #22c55e;
-}
-
-.expense {
-  border-left: 5px solid #ef4444;
-} */
 
 .grid {
   display: grid;

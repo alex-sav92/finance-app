@@ -5,6 +5,7 @@ import { AccountService } from '../../../services/account.service';
 import { CategoriesService } from '../../categories/categories.service';
 import { TransactionService } from '../../../services/transaction.service';
 import { AuthService } from '../../../core/auth.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -33,15 +34,28 @@ export class AddTransactionComponent implements OnInit {
     private accountsService: AccountService,
     private categoriesService: CategoriesService,
     private transactionsService: TransactionService,
-    private authservice: AuthService
+    private authservice: AuthService,
+    private preferencesService: PreferencesService
   ) {}
 
   async ngOnInit() {
     this.accounts = await this.accountsService.getAccounts();
     if (this.accounts.length > 0) {
+      //TODO: move implementation as a user preference
       this.selectedAccountId = this.accounts[0].id;
     }
     this.categories = await this.categoriesService.getCategories();
+    this.loadPreferences();
+  }
+
+  async loadPreferences() {
+    const { data } = await this.preferencesService.getPreferences();
+    if (data?.default_category) {
+      const categoryExists = this.categories.find(c => c.name === data.default_category);
+      if (categoryExists) {
+        this.categoryId = categoryExists.id;
+      }
+    }
   }
 
   async submit() {
