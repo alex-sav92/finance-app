@@ -1,0 +1,1 @@
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f1f5f9}body.dark{background:#111827;color:#fff}.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 12px #0000000f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.charts{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
