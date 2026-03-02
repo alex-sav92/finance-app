@@ -5,19 +5,23 @@ import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartType } from 'chart.js';
 import { UserCurrencyPipe } from '../../user-currency.pipe';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   providers: [AccountService, TransactionService],
   imports: [CommonModule, NgChartsModule, UserCurrencyPipe],
-  styleUrls: ['./dashboard.component.css']   // <-- IMPORTANT
+  styleUrls: ['./dashboard.component.css']  
 })
 export class DashboardComponent implements OnInit {
 
   public pieChartType: ChartType = 'pie';
-
+  monthlyBudget = 0;
+  budgetRemaining = 0;
+  budgetUsedPercent = 0;
   public pieChartData: any; 
+  public insights: any = {};
   accounts: any[] = [];
   transactions: any[] = [];
   monthlyLabels: string[] = [];
@@ -32,13 +36,18 @@ export class DashboardComponent implements OnInit {
   income = 0;
   expenses = 0;
   categoryPercentages: number[] = [];
+  currentMonthSpending: any;
+  averageMonthlySpending: number = 0;
+  categoryComparison: { category: string; current: number; previous: number; diff: number; percent: string | number; }[] = [];
 
   constructor(
     private accountsService: AccountService,
-    private transactionsService: TransactionService
+    private transactionsService: TransactionService,
+    private preferencesService: PreferencesService
   ) {}
 
   async ngOnInit() {
+    await this.loadPreferences();
     await this.loadData();
   }
 
@@ -47,10 +56,11 @@ export class DashboardComponent implements OnInit {
     this.accounts = await this.accountsService.getAccounts();
     this.transactions = await this.transactionsService.getTransactions();
 
-    this.calculateStats();
+    this.calculateMonthStats();
+    await this.calculateInsights();
   }
 
-  calculateStats() {
+  calculateMonthStats() {
 
     this.totalBalance = this.accounts.reduce(
       (sum, acc) => sum + Number(acc.balance || 0),
@@ -129,4 +139,80 @@ export class DashboardComponent implements OnInit {
     ]
   };
 }
+ calculateInsights() {
+  if (!this.transactions.length) return;
+
+  const groupedByMonth: Record<string, number> = {};
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  console.log('Current month key:', currentMonthKey);
+  const previousMonthKey = `${now.getFullYear()}-${now.getMonth() - 1}`;
+
+  const categoryCurrent: Record<string, number> = {};
+  const categoryPrevious: Record<string, number> = {};
+
+  this.transactions.forEach(tx => {
+    const date = new Date(tx.created_at);
+    const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
+
+    // --- Monthly totals
+    groupedByMonth[monthKey] =
+      (groupedByMonth[monthKey] || 0) + (tx.type === 'expense' ? tx.amount : 0);
+
+    // --- Current month total
+    if (monthKey === currentMonthKey) {
+      this.currentMonthSpending += tx.amount; 
+      categoryCurrent[tx.category] =
+        (categoryCurrent[tx.category] || 0) + tx.amount;
+      console.log(`Added ${tx.amount} to currentMSpend: ${this.currentMonthSpending}`);
+    }
+
+    // --- Previous month
+    if (monthKey === previousMonthKey) {
+      categoryPrevious[tx.category] =
+        (categoryPrevious[tx.category] || 0) + tx.amount;
+    }
+  });
+
+  const months = Object.keys(groupedByMonth).length;
+  const totalSpending = Object.values(groupedByMonth)
+    .reduce((a, b) => a + b, 0);
+
+  this.averageMonthlySpending = totalSpending / months;
+
+  // --- Category comparison
+  this.categoryComparison = Object.keys(categoryCurrent).map(cat => {
+    const current = categoryCurrent[cat] || 0;
+    const previous = categoryPrevious[cat] || 0;
+    const diff = current - previous;
+    const percent = previous
+      ? ((diff / previous) * 100).toFixed(1)
+      : 100;
+
+    return {
+      category: cat,
+      current,
+      previous,
+      diff,
+      percent
+    };
+  });
+
+  if (this.monthlyBudget > 0) {
+    console.log('Current spent:', this.currentMonthSpending);
+  this.budgetRemaining =
+    this.monthlyBudget - this.currentMonthSpending;
+    console.log('Calculated budget remaining:', this.budgetRemaining);
+
+  this.budgetUsedPercent =
+    (this.currentMonthSpending / this.monthlyBudget) * 100;
+  }
+}
+
+  async loadPreferences() {
+    const { data } = await this.preferencesService.getPreferences();
+    if (data?.monthly_budget) {
+      this.monthlyBudget = Number(data.monthly_budget);
+    }
+  }
 }

@@ -13,26 +13,65 @@
 
     <div class="card expense">
       <h3>Expenses</h3>
-      <p>{{ expenses | userCurrency }}</p>
     </div>
   </div>
 
   <div class="charts grid">
     <div class="chart-card">
       <h3>Expenses by Category</h3>
-      <canvas
-        baseChart
-        [data]="pieChartData"
-        [type]="pieChartType">
-      </canvas>
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [data]="pieChartData"
+          [type]="pieChartType">
+        </canvas>
+      </div>
     </div>
-    <div class="card">
-      <h3>Percents out of total spending:</h3>
+      <!-- <h3>Percents out of total spending:</h3>
       <ul>
         <li *ngFor="let pct of categoryPercentages; let i = index">
           {{ pct.toFixed(2) }}% {{ categoryLabels[i] }} 
         </li>
-      </ul>
+      </ul> -->
+      <div class="card white">
+      <h3>Insights</h3>
+      <div class="insight-item">
+        <span>Average Monthly Spending</span>
+        <strong>{{ averageMonthlySpending | userCurrency }}</strong>
+      </div>
+      <div class="insight-item">
+        <span>This Month</span>
+        <strong>{{ currentMonthSpending | userCurrency }}</strong>
+      </div>
+      <div class="insight-item">
+        <span>Monthly Budget</span>
+        <strong
+          [class.over-budget]="monthlyBudget < 0"
+        >
+          {{ monthlyBudget | userCurrency }}
+        </strong>
+      </div>
+      <div class="insight-item">
+        <span>Remaining</span>
+        <strong>{{ monthlyBudget - currentMonthSpending | userCurrency }}</strong>
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="budgetUsedPercent"
+            [class.danger]="budgetUsedPercent > 100"
+            [class.warning]="budgetUsedPercent > 80 && budgetUsedPercent <= 100"
+          ></div>
+        </div>
+      </div>
+      <div *ngFor="let cat of categoryComparison" class="insight-item">
+        <span>{{ cat.category }}</span>
+        <strong
+          [class.positive]="cat.diff < 0"
+          [class.negative]="cat.diff > 0"
+        >
+          {{ cat.percent }}%
+        </strong>
+      </div>
     </div>
   </div>
 </div>
