@@ -54,7 +54,7 @@
       </div>
       <div class="insight-item">
         <span>Remaining</span>
-        <strong>{{ monthlyBudget - expensesThisMonth | userCurrency }}</strong>
+        <strong>{{ budgetRemaining | userCurrency }}</strong>
       </div>
       <div class="insight-item">
         <span>Used %</span>
@@ -71,6 +71,10 @@
         </div>
         
         </strong>
+      </div>
+      <div class="insight-item">
+        <span>Daily Budget</span>
+        <strong>{{ dailyBudget | userCurrency }}</strong>
       </div>
       <div *ngFor="let cat of categoryComparison" class="insight-item">
         <span>{{ cat.category }}</span>
