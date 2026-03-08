@@ -25,7 +25,7 @@ import { UserCurrencyPipe } from '../../../user-currency.pipe';
       <div class="tx-meta">
         {{ tx.accounts?.name }}
         •
-        {{ tx.description || 'No description' }}
+        {{ tx.note || '-' }}
         •
         {{ tx.occurred_at | date:'mediumDate' }}
       </div>
