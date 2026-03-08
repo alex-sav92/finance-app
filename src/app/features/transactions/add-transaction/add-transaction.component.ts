@@ -80,10 +80,10 @@ export class AddTransactionComponent implements OnInit {
       })
 
       this.message = 'Transaction added ✅';
-      //success message clears after 3 seconds
+      //success message clears after 2 seconds
       setTimeout(() => {
         this.message = '';
-      }, 3000);
+      }, 2000);
 
       this.resetForm();
 
