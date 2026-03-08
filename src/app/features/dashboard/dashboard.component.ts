@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     this.transactions = await this.transactionsService.getTransactions();
 
     this.calculateMonthStats();
-    await this.calculateInsights();
+    //await this.calculateInsights();
   }
 
   calculateMonthStats() {
@@ -72,33 +72,35 @@ export class DashboardComponent implements OnInit {
 
     const monthlyMap: any = {};
     const categoryMap: any = {};
-
+    const now = new Date();
     for (const t of this.transactions) {
 
       const amount = Number(t.amount);
-      const date = new Date(t.date);
-      const month = date.toLocaleString('default', { month: 'short' });
+      const occurred_at = new Date(Date.parse(t.occurred_at));
 
-      if (!monthlyMap[month]) {
-        monthlyMap[month] = { income: 0, expense: 0 };
+      const month = occurred_at.toLocaleString('default', { month: 'short' });
+      const key = `${occurred_at.getMonth() + 1}-${occurred_at.getFullYear()}`;
+      if (!monthlyMap[key]) {
+        monthlyMap[key] = { income: 0, expense: 0 };
       }
 
       if (t.type === 'income') {
         this.income += amount;
-        monthlyMap[month].income += amount;
+        monthlyMap[key].income += amount;
       } else {
         this.expenses += amount;
-        monthlyMap[month].expense += amount;
+        monthlyMap[key].expense += amount;
 
         const category = t.categories?.name ?? 'Other';
-
         if (!categoryMap[category]) {
-          categoryMap[category] = 0;
+            categoryMap[category] = 0;
         }
-
-        categoryMap[category] += amount;
+        if (now.getMonth() === occurred_at.getMonth() && now.getFullYear() === occurred_at.getFullYear()) {
+          categoryMap[category] += amount;
+        }
       }
     }
+    console.log('CAT', categoryMap);
 
     this.monthlyLabels = Object.keys(monthlyMap);
 
@@ -144,9 +146,9 @@ export class DashboardComponent implements OnInit {
 
   const groupedByMonth: Record<string, number> = {};
   const now = new Date();
-  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth() +1}`;
   console.log('Current month key:', currentMonthKey);
-  const previousMonthKey = `${now.getFullYear()}-${now.getMonth() - 1}`;
+  const previousMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
 
   const categoryCurrent: Record<string, number> = {};
   const categoryPrevious: Record<string, number> = {};
