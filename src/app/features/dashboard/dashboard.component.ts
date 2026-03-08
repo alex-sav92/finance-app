@@ -36,9 +36,13 @@ export class DashboardComponent implements OnInit {
   incomeThisMonth = 0;
   expensesThisMonth = 0;
   categoryPercentages: number[] = [];
-  currentMonthSpending: any;
   averageMonthlySpending: number = 0;
-  categoryComparison: { category: string; current: number; previous: number; diff: number; percent: string | number; }[] = [];
+  categoryComparison: { 
+    category: string; 
+    current: number; 
+    previous: number; 
+    diff: number; 
+    percent: string | number; }[] = [];
 
   constructor(
     private accountsService: AccountService,
@@ -57,15 +61,10 @@ export class DashboardComponent implements OnInit {
     this.transactions = await this.transactionsService.getTransactions();
 
     this.calculateMonthStats();
-    //await this.calculateInsights();
+    this.calculateInsights();
   }
 
   calculateMonthStats() {
-
-    this.totalBalance = this.accounts.reduce(
-      (sum, acc) => sum + Number(acc.balance || 0),
-      0
-    );
 
     this.incomeThisMonth = 0;
     this.expensesThisMonth = 0;
@@ -146,35 +145,37 @@ export class DashboardComponent implements OnInit {
 
   const groupedByMonth: Record<string, number> = {};
   const now = new Date();
-  const currentMonthKey = `${now.getFullYear()}-${now.getMonth() +1}`;
-  console.log('Current month key:', currentMonthKey);
-  const previousMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const currentMonthKey = `${now.getMonth()+1}-${now.getFullYear()}`;
+  const previousMonthKey = `${now.getMonth()}-${now.getFullYear()}`
 
-  const categoryCurrent: Record<string, number> = {};
-  const categoryPrevious: Record<string, number> = {};
+  const categoryCurrentMonth: Record<string, number> = {};
+  const categoryPreviousMonth: Record<string, number> = {};
 
-  this.transactions.forEach(tx => {
-    const date = new Date(tx.created_at);
-    const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
-
+  for (const tx of this.transactions) {
+    const occurred_at = new Date(Date.parse(tx.occurred_at));
+    const isThisMonth = occurred_at.getMonth() === now.getMonth() && occurred_at.getFullYear() === now.getFullYear();
+    const isPreviousMonth = occurred_at.getMonth() === now.getMonth() - 1 && occurred_at.getFullYear() === now.getFullYear();
+      if (!isThisMonth && !isPreviousMonth)
+        continue;
+    // key is Month-Year, with month from 1-12
+    const monthKey = `${occurred_at.getMonth()+1}-${occurred_at.getFullYear()}`;
     // --- Monthly totals
     groupedByMonth[monthKey] =
       (groupedByMonth[monthKey] || 0) + (tx.type === 'expense' ? tx.amount : 0);
 
+    const category = tx.categories?.name ?? 'Other';
     // --- Current month total
     if (monthKey === currentMonthKey) {
-      this.currentMonthSpending += tx.amount; 
-      categoryCurrent[tx.category] =
-        (categoryCurrent[tx.category] || 0) + tx.amount;
-      console.log(`Added ${tx.amount} to currentMSpend: ${this.currentMonthSpending}`);
+      categoryCurrentMonth[category] =
+        (categoryCurrentMonth[category] || 0) + tx.amount;
     }
 
     // --- Previous month
     if (monthKey === previousMonthKey) {
-      categoryPrevious[tx.category] =
-        (categoryPrevious[tx.category] || 0) + tx.amount;
+      categoryPreviousMonth[category] =
+        (categoryPreviousMonth[category] || 0) + tx.amount;
     }
-  });
+  };
 
   const months = Object.keys(groupedByMonth).length;
   const totalSpending = Object.values(groupedByMonth)
@@ -183,31 +184,27 @@ export class DashboardComponent implements OnInit {
   this.averageMonthlySpending = totalSpending / months;
 
   // --- Category comparison
-  this.categoryComparison = Object.keys(categoryCurrent).map(cat => {
-    const current = categoryCurrent[cat] || 0;
-    const previous = categoryPrevious[cat] || 0;
+  this.categoryComparison = Object.keys(categoryCurrentMonth).map(cat => {
+    const current = categoryCurrentMonth[cat] || 0;
+    const previous = categoryPreviousMonth[cat] || 0;
     const diff = current - previous;
-    const percent = previous
-      ? ((diff / previous) * 100).toFixed(1)
-      : 100;
-
+    const p = previous
+      ? ((diff / previous) * 100).toFixed(0)
+      : 0;
     return {
       category: cat,
       current,
       previous,
       diff,
-      percent
+      percent: p === 0 ? 'N/A': p + '%'
     };
   });
 
   if (this.monthlyBudget > 0) {
-    console.log('Current spent:', this.currentMonthSpending);
-  this.budgetRemaining =
-    this.monthlyBudget - this.currentMonthSpending;
-    console.log('Calculated budget remaining:', this.budgetRemaining);
+    this.budgetRemaining = this.monthlyBudget - this.expensesThisMonth;
 
   this.budgetUsedPercent =
-    (this.currentMonthSpending / this.monthlyBudget) * 100;
+    (this.expensesThisMonth / this.monthlyBudget) * 100;
   }
 }
 
