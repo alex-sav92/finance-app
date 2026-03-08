@@ -100,7 +100,6 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
-    console.log('CAT', categoryMap);
 
     this.monthlyLabels = Object.keys(monthlyMap);
 
