@@ -43,7 +43,10 @@ export class DashboardComponent implements OnInit {
     previous: number; 
     diff: number; 
     percent: string | number; }[] = [];
+
   dailyBudget: number = 0;
+  maxExpenseThisMonth = 0;
+  maxExpenseCategory = '';
 
   constructor(
     private accountsService: AccountService,
@@ -69,6 +72,7 @@ export class DashboardComponent implements OnInit {
 
     this.incomeThisMonth = 0;
     this.expensesThisMonth = 0;
+    this.maxExpenseThisMonth = 0;
 
     const monthlyMap: any = {};
     const categoryMap: any = {};
@@ -98,6 +102,10 @@ export class DashboardComponent implements OnInit {
         }
         if (now.getMonth() === occurred_at.getMonth() && now.getFullYear() === occurred_at.getFullYear()) {
           categoryMap[category] += amount;
+        }
+        if (amount > this.maxExpenseThisMonth && category !== 'Economii') {
+          this.maxExpenseThisMonth = amount;
+          this.maxExpenseCategory = category;
         }
       }
     }

@@ -41,7 +41,7 @@
         <strong>{{ averageMonthlySpending | userCurrency }}</strong>
       </div>
       <div class="insight-item">
-        <span>This Month</span>
+        <span>This Month MAX: {{maxExpenseThisMonth | userCurrency}}</span>
         <strong>{{ expensesThisMonth | userCurrency }}</strong>
       </div>
       <div class="insight-item">
@@ -84,6 +84,10 @@
         >
           {{ cat.percent }}
         </strong>
+      </div>
+      <div class="insight-item">
+        <span>Biggest expense this month</span>
+        <strong>{{ maxExpenseThisMonth | userCurrency }} ({{ maxExpenseCategory }})</strong>
       </div>
     </div>
   </div>
