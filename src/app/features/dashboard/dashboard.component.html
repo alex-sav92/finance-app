@@ -3,16 +3,17 @@
 
     <div class="card">
       <h3>Balance this month</h3>
-      <p>{{ income - expenses | userCurrency }}</p>
+      <p>{{ incomeThisMonth - expensesThisMonth | userCurrency }}</p>
     </div>
 
     <div class="card income">
       <h3>Income</h3>
-      <p>{{ income | userCurrency }}</p>
+      <p>{{ incomeThisMonth | userCurrency }}</p>
     </div>
 
     <div class="card expense">
       <h3>Expenses</h3>
+      <p>{{ expensesThisMonth | userCurrency }}</p>
     </div>
   </div>
 

@@ -33,8 +33,8 @@ export class DashboardComponent implements OnInit {
   categoryData: number[] = [];
 
   totalBalance = 0;
-  income = 0;
-  expenses = 0;
+  incomeThisMonth = 0;
+  expensesThisMonth = 0;
   categoryPercentages: number[] = [];
   currentMonthSpending: any;
   averageMonthlySpending: number = 0;
@@ -67,28 +67,29 @@ export class DashboardComponent implements OnInit {
       0
     );
 
-    this.income = 0;
-    this.expenses = 0;
+    this.incomeThisMonth = 0;
+    this.expensesThisMonth = 0;
 
     const monthlyMap: any = {};
     const categoryMap: any = {};
     const now = new Date();
     for (const t of this.transactions) {
-
-      const amount = Number(t.amount);
       const occurred_at = new Date(Date.parse(t.occurred_at));
-
-      const month = occurred_at.toLocaleString('default', { month: 'short' });
+      const isThisMonth = occurred_at.getMonth() === now.getMonth() && occurred_at.getFullYear() === now.getFullYear();
+      if (!isThisMonth)
+        continue;
+      // key is Month-Year, with month from 1-12
       const key = `${occurred_at.getMonth() + 1}-${occurred_at.getFullYear()}`;
+      const amount = Number(t.amount);
       if (!monthlyMap[key]) {
         monthlyMap[key] = { income: 0, expense: 0 };
       }
-
+      
       if (t.type === 'income') {
-        this.income += amount;
+        this.incomeThisMonth += amount;
         monthlyMap[key].income += amount;
       } else {
-        this.expenses += amount;
+        this.expensesThisMonth += amount;
         monthlyMap[key].expense += amount;
 
         const category = t.categories?.name ?? 'Other';
