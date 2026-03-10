@@ -28,20 +28,29 @@
         </canvas>
       </div>
     </div>
-      <!-- <h3>Percents out of total spending:</h3>
-      <ul>
-        <li *ngFor="let pct of categoryPercentages; let i = index">
-          {{ pct.toFixed(2) }}% {{ categoryLabels[i] }} 
-        </li>
-      </ul> -->
-      <div class="card white">
-      <h3>Budget info</h3>
+    <div class="card white">
+      <h3>Compared to past month</h3>
+      
+
+
+      <!-- <div class="insight-item"><strong>Compared to past month</strong></div> -->
+      <div *ngFor="let cat of categoryComparison" class="insight-item">
+        <span>{{ cat.category }}</span>
+        <strong
+          [class.positive]="cat.diff < 0"
+          [class.negative]="cat.diff > 0"
+        >
+          {{ cat.percent }}
+        </strong>
+      </div>
+    </div>
+    <div class="card white">
       <div class="insight-item">
         <span>Average Monthly Spending</span>
         <strong>{{ averageMonthlySpending | userCurrency }}</strong>
       </div>
       <div class="insight-item">
-        <span>This Month MAX: {{maxExpenseThisMonth | userCurrency}}</span>
+        <span>This Month</span>
         <strong>{{ expensesThisMonth | userCurrency }}</strong>
       </div>
       <div class="insight-item">
@@ -76,19 +85,11 @@
         <span>Daily Budget</span>
         <strong>{{ dailyBudget | userCurrency }}</strong>
       </div>
-      <div *ngFor="let cat of categoryComparison" class="insight-item">
-        <span>{{ cat.category }}</span>
-        <strong
-          [class.positive]="cat.diff < 0"
-          [class.negative]="cat.diff > 0"
-        >
-          {{ cat.percent }}
-        </strong>
-      </div>
       <div class="insight-item">
         <span>Biggest expense this month</span>
         <strong>{{ maxExpenseThisMonth | userCurrency }} ({{ maxExpenseCategory }})</strong>
       </div>
     </div>
+
   </div>
 </div>

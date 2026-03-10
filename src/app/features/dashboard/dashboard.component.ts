@@ -6,6 +6,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ChartType } from 'chart.js';
 import { UserCurrencyPipe } from '../../user-currency.pipe';
 import { PreferencesService } from '../../services/preferences.service';
+import { ExpenseCategory } from '../../utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -103,7 +104,8 @@ export class DashboardComponent implements OnInit {
         if (now.getMonth() === occurred_at.getMonth() && now.getFullYear() === occurred_at.getFullYear()) {
           categoryMap[category] += amount;
         }
-        if (amount > this.maxExpenseThisMonth && category !== 'Economii') {
+        if (amount > this.maxExpenseThisMonth && 
+            category !== ExpenseCategory.Economii && category !== ExpenseCategory.Rata) {
           this.maxExpenseThisMonth = amount;
           this.maxExpenseCategory = category;
         }
