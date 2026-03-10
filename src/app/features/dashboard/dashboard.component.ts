@@ -7,6 +7,10 @@ import { ChartType } from 'chart.js';
 import { UserCurrencyPipe } from '../../user-currency.pipe';
 import { PreferencesService } from '../../services/preferences.service';
 import { ExpenseCategory } from '../../utils';
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
+import { Chart } from 'chart.js';
+
+Chart.register(ChartDataLabels);
 
 @Component({
   selector: 'app-dashboard',
@@ -48,7 +52,7 @@ export class DashboardComponent implements OnInit {
   dailyBudget: number = 0;
   maxExpenseThisMonth = 0;
   maxExpenseCategory = '';
-
+  chartOptions: any = {};
   constructor(
     private accountsService: AccountService,
     private transactionsService: TransactionService,
@@ -127,6 +131,27 @@ export class DashboardComponent implements OnInit {
 
     const sumSpending = this.categoryData.reduce((a, b) => a + b, 0);
     this.categoryPercentages = this.categoryData.map(d => (d / sumSpending) * 100);
+
+    this.chartOptions = {
+      plugins: {
+        datalabels: {
+          color: '#fff',
+          font: {
+            weight: 'bold',
+            size: 12
+          },
+          formatter: (value:number, context: Context) => {
+            const data = context.chart.data.datasets[0].data as number[];
+            const total = data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return percentage + '%';
+          }
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
 
     this.categoryColors = [
       '#ef4444',
