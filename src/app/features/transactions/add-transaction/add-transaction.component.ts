@@ -97,7 +97,7 @@ export class AddTransactionComponent implements OnInit {
   resetForm() {
     this.amount = null;
     this.note = '';
-    this.categoryId = '';
+    this.loadPreferences();
   }
 
 }
