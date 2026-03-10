@@ -133,6 +133,8 @@ export class DashboardComponent implements OnInit {
     this.categoryPercentages = this.categoryData.map(d => (d / sumSpending) * 100);
 
     this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         datalabels: {
           color: '#fff',
@@ -148,7 +150,12 @@ export class DashboardComponent implements OnInit {
           }
         },
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            boxWidth: 14,
+            font: { size: 13}
+          }
         }
       }
     }
@@ -171,7 +178,10 @@ export class DashboardComponent implements OnInit {
     datasets: [
       {
         data: this.categoryData,
-        backgroundColor: this.categoryColors
+        backgroundColor: this.categoryColors,
+        borderWidth: 2,
+        borderRadius: 6,
+        spacing: 4
       }
     ]
   };

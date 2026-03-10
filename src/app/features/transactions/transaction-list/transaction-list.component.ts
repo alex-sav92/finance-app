@@ -23,11 +23,11 @@ import { UserCurrencyPipe } from '../../../user-currency.pipe';
       </div>
 
       <div class="tx-meta">
-        {{ tx.accounts?.name }}
-        •
-        {{ tx.note || '-' }}
-        •
+        <!-- {{ tx.accounts?.name }} -->
         {{ tx.occurred_at | date:'mediumDate' }}
+        
+        <span *ngIf="tx.note"> • {{ tx.note }}</span>
+        
       </div>
 
     </div>
