@@ -40,20 +40,22 @@ export class AddTransactionComponent implements OnInit {
 
   async ngOnInit() {
     this.accounts = await this.accountsService.getAccounts();
-    if (this.accounts.length > 0) {
-      //TODO: move implementation as a user preference
-      this.selectedAccountId = this.accounts[0].id;
-    }
     this.categories = await this.categoriesService.getCategories();
-    this.loadPreferences();
+    this.setDefaultsFromPreferences();
   }
 
-  async loadPreferences() {
+  async setDefaultsFromPreferences() {
     const { data } = await this.preferencesService.getPreferences();
     if (data?.default_category) {
       const categoryExists = this.categories.find(c => c.name === data.default_category);
       if (categoryExists) {
         this.categoryId = categoryExists.id;
+      }
+    }
+    if (data?.default_account_id) {
+      const accountExists = this.accounts.find(c => c.id === data.default_account_id);
+      if (accountExists) {
+        this.selectedAccountId = accountExists.id;
       }
     }
   }
@@ -97,7 +99,7 @@ export class AddTransactionComponent implements OnInit {
   resetForm() {
     this.amount = null;
     this.note = '';
-    this.loadPreferences();
+    this.setDefaultsFromPreferences();
   }
 
 }

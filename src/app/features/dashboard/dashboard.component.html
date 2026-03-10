@@ -24,16 +24,13 @@
         <canvas
           baseChart
           [data]="pieChartData"
-          [type]="pieChartType">
+          [type]="pieChartType"
+          [options]="chartOptions">
         </canvas>
       </div>
     </div>
     <div class="card white">
       <h3>Compared to past month</h3>
-      
-
-
-      <!-- <div class="insight-item"><strong>Compared to past month</strong></div> -->
       <div *ngFor="let cat of categoryComparison" class="insight-item">
         <span>{{ cat.category }}</span>
         <strong
