@@ -42,12 +42,7 @@ export class DashboardComponent implements OnInit {
   expensesThisMonth = 0;
   categoryPercentages: number[] = [];
   averageMonthlySpending: number = 0;
-  categoryComparison: { 
-    category: string; 
-    current: number; 
-    previous: number; 
-    diff: number; 
-    percent: string | number; }[] = [];
+  categoryComparison: any = [];
 
   dailyBudget: number = 0;
   maxExpenseThisMonth = 0;
@@ -233,18 +228,19 @@ export class DashboardComponent implements OnInit {
   this.categoryComparison = Object.keys(categoryCurrentMonth).map(cat => {
     const current = categoryCurrentMonth[cat] || 0;
     const previous = categoryPreviousMonth[cat] || 0;
+    if (!current || !previous) return null;   // remove missing data
+    if (current === previous) return null;    // remove equal values
+    
     const diff = current - previous;
-    const p = previous
-      ? ((diff / previous) * 100).toFixed(0)
-      : 0;
+    const percentChange = diff > 0 ? '+' +(diff / previous * 100).toFixed(1) : ((diff / previous) * 100).toFixed(1);
     return {
       category: cat,
       current,
       previous,
       diff,
-      percent: p === 0 ? 'N/A': p + '%'
+      percent: percentChange + '%'
     };
-  });
+  }).filter(Boolean) // remove nulls;
 
   if (this.monthlyBudget > 0) {
     this.budgetRemaining = this.monthlyBudget - this.expensesThisMonth;
