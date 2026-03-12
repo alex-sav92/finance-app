@@ -46,8 +46,8 @@ export class AddTransactionComponent implements OnInit {
 
   async setDefaultsFromPreferences() {
     const { data } = await this.preferencesService.getPreferences();
-    if (data?.default_category) {
-      const categoryExists = this.categories.find(c => c.name === data.default_category);
+    if (data?.default_category_id) {
+      const categoryExists = this.categories.find(c => c.id === data.default_category_id);
       if (categoryExists) {
         this.categoryId = categoryExists.id;
       }
@@ -61,7 +61,6 @@ export class AddTransactionComponent implements OnInit {
   }
 
   async submit() {
-
     if (!this.amount || !this.selectedAccountId) {
       this.message = 'Please fill required fields';
       return;
