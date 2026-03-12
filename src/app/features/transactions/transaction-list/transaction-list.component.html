@@ -1,0 +1,54 @@
+<div class="page">
+
+  <h2>Transactions</h2>
+
+  <div class="tx-card"
+       *ngFor="let tx of transactions">
+<!-- ceva -->
+    <div class="tx-left" *ngIf="editingTransactionId !== tx.id">
+      <div class="tx-title">
+        {{ tx.categories?.name || 'Uncategorized' }}
+      </div>
+
+      <div class="tx-meta">
+        <!-- {{ tx.accounts?.name }} -->
+        {{ tx.occurred_at | date:'mediumDate' }}
+        <span *ngIf="tx.note"> • {{ tx.note }}</span>
+      </div>
+    </div>
+    <!-- ceva -->
+    <div class="tx-left" *ngIf="editingTransactionId === tx.id" class="edit-row">
+        <input type="number" [(ngModel)]="editAmount" />
+
+        <select [(ngModel)]="editCategoryId">
+            <option *ngFor="let cat of categories" [value]="cat.id">
+                {{ cat.name }}
+            </option>
+        </select>
+
+        <input type="text" [(ngModel)]="editNote" placeholder="Note" />
+
+        <button class="primary-btn green" (click)="saveEdit(tx)">✓</button>
+        <button class="primary-btn red" (click)="cancelEdit()">X</button>
+    </div>
+
+    <div class="tx-right">
+      <div
+        class="amount"
+        [class.income]="tx.type === 'income'"
+        [class.expense]="tx.type === 'expense'">
+
+        {{ tx.type === 'expense' ? '-' : '+' }}
+        {{ tx.amount | userCurrency }}
+
+      </div>
+
+      <div class="actions">
+        <div *ngIf="editingTransactionId !== tx.id">
+            <button class="edit" (click)="startEdit(tx)">Edit</button>
+            <button class="delete" (click)="deleteTransaction(tx.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

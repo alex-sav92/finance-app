@@ -45,4 +45,16 @@ export class TransactionService {
     if (error) throw error;
   }
 
+  async updateTransaction(id: string, amount: number, category_id: any, note: any) {
+    const { error } = await supabase.from('transactions')
+      .update({
+        amount: amount,
+        category_id: category_id,
+        note: note
+      })
+      .eq('id', id);
+
+      if (error) throw error;
+  }
+
 }

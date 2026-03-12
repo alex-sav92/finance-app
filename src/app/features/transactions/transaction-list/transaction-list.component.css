@@ -86,3 +86,48 @@ h2 {
 .actions .delete:hover {
   background: #fecaca;
 }
+.actions .edit {
+  background: #99cde2;
+  color: #1622a3;
+}
+.edit-row {
+  display: grid;
+  grid-template-columns: 100px 150px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.edit-row input,
+.edit-row select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+
+.primary-btn {
+  margin-top: 1px;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  background: #6366f1;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.green {
+  background: #16a34a;
+}
+.red {
+  background: #dc2626;
+}
+
+@media (max-width: 600px) {
+
+  .edit-row {
+    grid-template-columns: 1fr;
+  }
+
+}

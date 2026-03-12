@@ -2,68 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
 import { UserCurrencyPipe } from '../../../user-currency.pipe';
-
+import { FormsModule } from '@angular/forms';
+import { CategoriesService } from '../../categories/categories.service';
 @Component({
   selector: 'app-transaction-list',
   standalone: true,
-  imports: [CommonModule, UserCurrencyPipe],
+  imports: [CommonModule, UserCurrencyPipe, FormsModule],
   styleUrls: ['./transaction-list.component.css'],
-  template: `
-    <div class="page">
-
-  <h2>Transactions</h2>
-
-  <div class="tx-card"
-       *ngFor="let tx of transactions">
-
-    <div class="tx-left">
-
-      <div class="tx-title">
-        {{ tx.categories?.name || 'Uncategorized' }}
-      </div>
-
-      <div class="tx-meta">
-        <!-- {{ tx.accounts?.name }} -->
-        {{ tx.occurred_at | date:'mediumDate' }}
-        
-        <span *ngIf="tx.note"> • {{ tx.note }}</span>
-        
-      </div>
-
-    </div>
-
-    <div class="tx-right">
-
-      <div
-        class="amount"
-        [class.income]="tx.type === 'income'"
-        [class.expense]="tx.type === 'expense'">
-
-        {{ tx.type === 'expense' ? '-' : '+' }}
-        {{ tx.amount | userCurrency }}
-
-      </div>
-
-      <div class="actions">
-        <!-- <button (click)="editTransaction(tx)">Edit</button> -->
-        <button class="delete" (click)="deleteTransaction(tx.id)">Delete</button>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-  `,
+  templateUrl: './transaction-list.component.html',
 })
 export class TransactionListComponent implements OnInit {
 
-editTransaction(_t5: any) {
-throw new Error('Method not implemented.');
-}
+  editingTransactionId: string | null = null;
+  editAmount: number | null = null;
+  editCategoryId: string | null = null;
+  editNote: string = '';
+  categories: any;
+
+  editTransaction(_t5: any) {
+    throw new Error('Method not implemented.');
+  }
   transactions: any = [];
 
-  constructor(private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService, private categoriesService: CategoriesService) {}
 
   async ngOnInit() {
     this.transactions = await this.transactionService.getTransactions();
@@ -77,4 +38,20 @@ throw new Error('Method not implemented.');
     this.transactions = this.transactions.filter((tx: any) => tx.id !== id);
   }
 
+  async startEdit(tx: any) {
+    this.editingTransactionId = tx.id;
+    this.editAmount = tx.amount;
+    this.editCategoryId = tx.category_id;
+    this.editNote = tx.note || '';
+    this.categories = await this.categoriesService.getCategories();
+  }
+  cancelEdit(){
+    this.editingTransactionId = null;
+  }
+  async saveEdit(tx:any) {
+    this.transactionService.updateTransaction(tx.id, this.editAmount!, this.editCategoryId!, this.editNote);
+    this.editingTransactionId = null;
+    //refresh list
+    this.transactions = await this.transactionService.getTransactions();
+  }
 }
