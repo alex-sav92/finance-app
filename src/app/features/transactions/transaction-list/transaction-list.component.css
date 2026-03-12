@@ -87,8 +87,11 @@ h2 {
   background: #fecaca;
 }
 .actions .edit {
-  background: #99cde2;
-  color: #1622a3;
+  background: #f3b809;
+  color: #8b6905;
+}
+.actions .edit:hover {
+  background: #d9a508;
 }
 .edit-row {
   display: grid;
