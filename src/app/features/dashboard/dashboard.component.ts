@@ -244,10 +244,11 @@ export class DashboardComponent implements OnInit {
 
   if (this.monthlyBudget > 0) {
     this.budgetRemaining = this.monthlyBudget - this.expensesThisMonth;
-    let lastDayThisMonth = (now.getMonth() === 3 || now.getMonth() === 5 || now.getMonth() === 8 || now.getMonth() === 10) ?
+    let lastDayThisMonth = (now.getMonth() === 3 || now.getMonth() === 5 || 
+      now.getMonth() === 8 || now.getMonth() === 10) ?
      30 : 31;
     if (now.getMonth() === 1) lastDayThisMonth = 28;
-    const daysLeft = lastDayThisMonth - now.getDay();
+    const daysLeft = lastDayThisMonth - now.getDate();
     this.dailyBudget = daysLeft > 0 ? this.budgetRemaining / daysLeft : 0;
 
   this.budgetUsedPercent =
