@@ -156,17 +156,23 @@ export class DashboardComponent implements OnInit {
     }
 
     this.categoryColors = [
-      '#ef4444',
-      '#f97316', 
+      '#d60909',
+      '#f97316',
+      '#ec4899',
       '#eab308', 
       '#22c55e',
       '#06b6d4',
       '#3b82f6',
       '#8b5cf6', 
-      '#ec4899', 
       '#14b8a6',
-      '#64748b'  
+      '#64748b',
+      '#3716b2', 
+      '#2b9b8e', 
     ];
+  const shuffle = (arr: string[]) => {
+    arr.sort(() => Math.random() - 0.5);
+  }
+  shuffle(this.categoryColors);
 
   this.pieChartData = {
     labels: this.categoryLabels,

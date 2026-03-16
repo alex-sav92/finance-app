@@ -57,7 +57,7 @@ h2 {
 }
 
 .amount.expense {
-  color: #dc2626;
+  color: #b91c1c;
 }
 
 .actions {
@@ -87,11 +87,11 @@ h2 {
   background: #fecaca;
 }
 .actions .edit {
-  background: #f3b809;
-  color: #8b6905;
+  background: #8cb3f3;
+  color: white;
 }
 .actions .edit:hover {
-  background: #d9a508;
+  background: #548eec;
 }
 .edit-row {
   display: grid;
