@@ -9,8 +9,8 @@ export class TransactionService {
   async getTransactions(fromDate?: Date | undefined, toDate?: Date | undefined) {
     const maxDate = new Date();
     const minDate = new Date(2000, 0, 1);
-    fromDate = fromDate ? fromDate : minDate;
-    toDate = toDate ? toDate : maxDate;
+    const strFromDate = fromDate ? this.constformatDate(fromDate) : this.constformatDate(minDate);
+    const strToDate = toDate ? this.constformatDate(toDate) : this.constformatDate(maxDate);
 
     const { data, error } = await supabase
       .from('transactions')
@@ -24,12 +24,12 @@ export class TransactionService {
           name
         )
       `)
-      .gte('occurred_at', fromDate.toISOString().split('T')[0])
-      .lte('occurred_at', toDate.toISOString().split('T')[0])
+      .gte('occurred_at', strFromDate)
+      .lte('occurred_at', strToDate)
       .order('occurred_at', { ascending: false });
 
     if (error) throw error;
-    
+    console.log('from: ', fromDate, 'to: ', toDate, 'transactions: ', data);
     return data ?? [];
   }
 
@@ -61,6 +61,14 @@ export class TransactionService {
       .eq('id', id);
 
       if (error) throw error;
+  }
+
+  constformatDate = (d: Date) => {
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, '0'),
+      String(d.getDate()).padStart(2, '0')
+    ].join('-');
   }
 
 }
