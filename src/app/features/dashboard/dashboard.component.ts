@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
   chartOptions: any = {};
   constructor(
     private accountsService: AccountService,
-    private transactionsService: TransactionService,
+    private transactionService: TransactionService,
     private preferencesService: PreferencesService
   ) {}
 
@@ -62,21 +62,23 @@ export class DashboardComponent implements OnInit {
   async loadData() {
 
     this.accounts = await this.accountsService.getAccounts();
-    this.transactions = await this.transactionsService.getTransactions(true);
-
+    
     this.calculateMonthStats();
-    this.calculateInsights();
+    this.comparePastMonth();
   }
 
-  calculateMonthStats() {
-
+  async calculateMonthStats() {
+    const now = new Date();
+    let startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    let endOfMonth = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    this.transactions = await this.transactionService.getTransactions(startOfMonth, endOfMonth);
     this.incomeThisMonth = 0;
     this.expensesThisMonth = 0;
     this.maxExpenseThisMonth = 0;
 
     const monthlyMap: any = {};
     const categoryMap: any = {};
-    const now = new Date();
+    
     for (const t of this.transactions) {
       const occurred_at = new Date(Date.parse(t.occurred_at));
       
@@ -185,11 +187,15 @@ export class DashboardComponent implements OnInit {
     ]
   };
 }
- calculateInsights() {
+ async comparePastMonth() {
+  const now = new Date();
+  let startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  let endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  this.transactions = await this.transactionService.getTransactions(startDate, endDate);
+
   if (!this.transactions.length) return;
 
   const groupedByMonth: Record<string, number> = {};
-  const now = new Date();
   const currentMonthKey = `${now.getMonth()+1}-${now.getFullYear()}`;
   const previousMonthKey = `${now.getMonth()}-${now.getFullYear()}`
 
