@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   async loadData() {
 
     this.accounts = await this.accountsService.getAccounts();
-    this.transactions = await this.transactionsService.getTransactions();
+    this.transactions = await this.transactionsService.getTransactions(true);
 
     this.calculateMonthStats();
     this.calculateInsights();
@@ -79,9 +79,7 @@ export class DashboardComponent implements OnInit {
     const now = new Date();
     for (const t of this.transactions) {
       const occurred_at = new Date(Date.parse(t.occurred_at));
-      const isThisMonth = occurred_at.getMonth() === now.getMonth() && occurred_at.getFullYear() === now.getFullYear();
-      if (!isThisMonth)
-        continue;
+      
       // key is Month-Year, with month from 1-12
       const key = `${occurred_at.getMonth() + 1}-${occurred_at.getFullYear()}`;
       const amount = Number(t.amount);

@@ -6,8 +6,13 @@ import { supabase } from '../core/supabase.client';
 })
 export class TransactionService {
 
-  async getTransactions() {
-
+  async getTransactions(thisMonthAndPastMonthOnly: boolean = false) {
+    const now = new Date();
+    const maxDate = new Date(2099, 11, 31);
+    const minDate = new Date(2000, 0, 1);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Last day of the current month
+    startOfMonth.setDate(1); // Set to the first day of the current month
     const { data, error } = await supabase
       .from('transactions')
       .select(`
@@ -20,6 +25,8 @@ export class TransactionService {
           name
         )
       `)
+      .gte('created_at', thisMonthAndPastMonthOnly ? startOfMonth.toISOString() : minDate.toISOString())
+      .lte('created_at', thisMonthAndPastMonthOnly ? endOfMonth.toISOString() : maxDate.toISOString())
       .order('occurred_at', { ascending: false });
 
     if (error) throw error;
