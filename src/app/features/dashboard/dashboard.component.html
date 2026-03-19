@@ -41,7 +41,8 @@
         </strong>
       </div>
     </div>
-    <div class="card white">
+    <div class="card white" *ngIf="this.show_budget">
+      <h3>Budget</h3>
       <div class="insight-item">
         <span>Average Monthly Spending</span>
         <strong>{{ averageMonthlySpending | userCurrency }}</strong>
@@ -80,7 +81,7 @@
       </div>
       <div class="insight-item">
         <span>Daily Budget</span>
-        <strong>{{ dailyBudget | userCurrency }}</strong>
+        <strong>{{ dailyBudget | userCurrency }} <span *ngIf="dailyBudget > spentToday">✅</span></strong>
       </div>
       <div class="insight-item">
         <span>Biggest elective expense this month</span>

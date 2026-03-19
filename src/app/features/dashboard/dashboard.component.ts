@@ -48,6 +48,9 @@ export class DashboardComponent implements OnInit {
   maxExpenseThisMonth = 0;
   maxExpenseCategory = '';
   chartOptions: any = {};
+  spentToday: number = 0;
+  show_budget: boolean = true;
+
   constructor(
     private accountsService: AccountService,
     private transactionService: TransactionService,
@@ -95,6 +98,9 @@ export class DashboardComponent implements OnInit {
       } else {
         this.expensesThisMonth += amount;
         monthlyMap[key].expense += amount;
+        if (occurred_at.getDate() === now.getDate()) {
+          this.spentToday += amount;
+        }
 
         const category = t.categories?.name ?? 'Other';
         if (!categoryMap[category]) {
@@ -270,6 +276,10 @@ export class DashboardComponent implements OnInit {
     const { data } = await this.preferencesService.getPreferences();
     if (data?.monthly_budget) {
       this.monthlyBudget = Number(data.monthly_budget);
+    }
+    if (data?.show_budget){
+      console.log('show budget', data.show_budget);
+      this.show_budget = data.show_budget;
     }
   }
 }
