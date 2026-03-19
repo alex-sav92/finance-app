@@ -100,7 +100,7 @@
 
 @media (max-width: 600px){
   .chart-container {
-    height: 220px;
+    height: 400px;
   }
   .grid {
     display: flex;
