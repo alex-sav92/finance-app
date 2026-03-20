@@ -1,9 +1,69 @@
 <div class="page">
 
   <h2>Transactions</h2>
+  <div class="card filters-card">
+    <h3>Filter</h3>
+    <div class="filters-grid">  
+      <div class="form-group">
+        <label>Category</label>
+        <select [(ngModel)]="filters.categoryId" (change)="applyFilters()">
+          <option value="">All</option>
+          <option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Search</label>
+        <input
+          type="text"
+          placeholder="e.g. coffee"
+          [(ngModel)]="filters.note"
+          (input)="applyFilters()"
+        />
+      </div>
 
+      <!-- From -->
+      <div class="form-group">
+        <label>From</label>
+        <input type="date" [(ngModel)]="filters.fromDate" (change)="applyFilters()" />
+      </div>
+
+      <!-- To -->
+      <div class="form-group">
+        <label>To</label>
+        <input type="date" [(ngModel)]="filters.toDate" (change)="applyFilters()" />
+      </div>
+
+      <!-- Preset -->
+      <div class="form-group">
+        <label>Quick Range</label>
+        <select #presetSelect (change)="applyPreset(presetSelect.value)">
+          <option value="">Custom</option>
+          <option value="7days">Last 7 days</option>
+          <option value="thisMonth">This month</option>
+          <option value="6months">Last 6 months</option>
+        </select>
+      </div>
+
+      <!-- Min -->
+      <div class="form-group">
+        <label>Min Amount</label>
+        <input type="number" [(ngModel)]="filters.minAmount" (input)="applyFilters()" />
+      </div>
+
+      <!-- Max -->
+      <div class="form-group">
+        <label>Max Amount</label>
+        <input type="number" [(ngModel)]="filters.maxAmount" (input)="applyFilters()" />
+      </div>
+    </div>
+    <div class="filters-actions">
+      <button class="btn-secondary" (click)="clearFilters()">Reset</button>
+    </div>
+  </div>
   <div class="tx-card"
-       *ngFor="let tx of transactions">
+       *ngFor="let tx of transactionsFiltered">
 <!-- ceva -->
     <div class="tx-left" *ngIf="editingTransactionId !== tx.id">
       <div class="tx-title">

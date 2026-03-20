@@ -18,16 +18,86 @@ export class TransactionListComponent implements OnInit {
   editCategoryId: string | null = null;
   editNote: string = '';
   categories: any;
+  filters = {
+    categoryId: '',
+    note: '',
+    fromDate: '',
+    toDate: '',
+    preset: '',
+    minAmount: null as number | null,
+    maxAmount: null as number | null
+  };
 
-  editTransaction(_t5: any) {
-    throw new Error('Method not implemented.');
-  }
   transactions: any = [];
+  transactionsFiltered: any[] = [];
 
   constructor(private transactionService: TransactionService, private categoriesService: CategoriesService) {}
 
   async ngOnInit() {
     this.transactions = await this.transactionService.getTransactions();
+    this.transactionsFiltered = this.transactions;
+    this.applyFilters();
+    this.categories = await this.categoriesService.getCategories();
+  }
+  applyFilters() {
+    this.transactionsFiltered = this.transactions.filter((tx: any) => {
+      if (this.filters.categoryId && tx.category_id !== this.filters.categoryId){
+        return false;
+      }
+
+      if (this.filters.note && !tx.note?.toLowerCase().includes(this.filters.note.toLowerCase())){
+        return false;
+      }
+
+      if (this.filters.fromDate && tx.occurred_at < this.filters.fromDate){
+        return false;
+      }
+
+      if (this.filters.toDate && tx.occurred_at > this.filters.toDate){
+        return false;
+      }
+
+      if (this.filters.minAmount != null && tx.amount < this.filters.minAmount){
+        return false;
+      }
+
+      if (this.filters.maxAmount != null && tx.amount > this.filters.maxAmount) {
+        return false;
+      }
+      
+      return true;
+    });
+  }
+
+  applyPreset(preset: string) {
+    const now = new Date();
+    const format = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+    let from: Date | null = null;
+    let to: Date | null = null;
+
+    if (preset === '7days') {
+      from = new Date();
+      from.setDate(now.getDate() - 7);
+      to = now;
+    }
+
+    if (preset === 'thisMonth') {
+      from = new Date(now.getFullYear(), now.getMonth(), 1);
+      to = now;
+    }
+
+    if (preset === '6months') {
+      from = new Date(now);
+      from.setMonth(now.getMonth() - 6);
+      to = now;
+    }
+
+    this.filters.fromDate = from ? format(from) : '';
+    this.filters.toDate = to ? format(to) : '';
+
+    this.applyFilters();
   }
 
   async deleteTransaction(id: any) {
@@ -43,7 +113,6 @@ export class TransactionListComponent implements OnInit {
     this.editAmount = tx.amount;
     this.editCategoryId = tx.category_id;
     this.editNote = tx.note || '';
-    this.categories = await this.categoriesService.getCategories();
   }
   cancelEdit(){
     this.editingTransactionId = null;
@@ -53,5 +122,19 @@ export class TransactionListComponent implements OnInit {
     this.editingTransactionId = null;
     //refresh list
     this.transactions = await this.transactionService.getTransactions();
+  }
+
+  clearFilters() {
+    this.filters = {
+      categoryId: '',
+      note: '',
+      fromDate: '',
+      toDate: '',
+      preset: '',
+      minAmount: null,
+      maxAmount: null
+    };
+
+    this.applyFilters();
   }
 }
