@@ -193,11 +193,11 @@ export class DashboardComponent implements OnInit {
     ]
   };
 }
- async comparePastMonth() {
+async comparePastMonth() {
   const now = new Date();
   let startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   let endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  this.transactions = await this.transactionService.getTransactions(startDate, endDate);
+  this.transactions = await this.transactionService.getTransactions(startDate, endDate, 'expense');
 
   if (!this.transactions.length) return;
 
@@ -210,10 +210,6 @@ export class DashboardComponent implements OnInit {
 
   for (const tx of this.transactions) {
     const occurred_at = new Date(Date.parse(tx.occurred_at));
-    const isThisMonth = occurred_at.getMonth() === now.getMonth() && occurred_at.getFullYear() === now.getFullYear();
-    const isPreviousMonth = occurred_at.getMonth() === now.getMonth() - 1 && occurred_at.getFullYear() === now.getFullYear();
-      if (!isThisMonth && !isPreviousMonth)
-        continue;
     // key is Month-Year, with month from 1-12
     const monthKey = `${occurred_at.getMonth()+1}-${occurred_at.getFullYear()}`;
     // --- Monthly totals
@@ -235,8 +231,7 @@ export class DashboardComponent implements OnInit {
   };
 
   const months = Object.keys(groupedByMonth).length;
-  const totalSpending = Object.values(groupedByMonth)
-    .reduce((a, b) => a + b, 0);
+  const totalSpending = Object.values(groupedByMonth).reduce((a, b) => a + b, 0);
 
   this.averageMonthlySpending = totalSpending / months;
 
@@ -245,7 +240,6 @@ export class DashboardComponent implements OnInit {
     const current = categoryCurrentMonth[cat] || 0;
     const previous = categoryPreviousMonth[cat] || 0;
     if (!current || !previous) return null;   // remove missing data
-    if (current === previous) return null;    // remove equal values
     
     const diff = current - previous;
     const percentChange = diff > 0 ? '+' +(diff / previous * 100).toFixed(1) : ((diff / previous) * 100).toFixed(1);
