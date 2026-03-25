@@ -6,7 +6,7 @@ import { supabase } from '../core/supabase.client';
 })
 export class TransactionService {
 
-  async getTransactions(fromDate?: Date | undefined, toDate?: Date | undefined, type: string = 'expense') {
+  async getTransactions(fromDate?: Date | undefined, toDate?: Date | undefined) {
     const maxDate = new Date();
     const minDate = new Date(2000, 0, 1);
     const strFromDate = fromDate ? this.constformatDate(fromDate) : this.constformatDate(minDate);
@@ -24,7 +24,6 @@ export class TransactionService {
           name
         )
       `)
-      .eq('type', type)
       .gte('occurred_at', strFromDate)
       .lte('occurred_at', strToDate)
       .order('occurred_at', { ascending: false });

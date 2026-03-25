@@ -73,13 +73,12 @@ export class DashboardComponent implements OnInit {
   async calculateMonthStats() {
     const now = new Date();
     let startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    let endOfMonth = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    this.transactions = await this.transactionService.getTransactions(startOfMonth, endOfMonth);
-    this.incomeThisMonth = 0;
+    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    this.transactions = await this.transactionService.getTransactions(startOfMonth, today);
+
     this.expensesThisMonth = 0;
     this.maxExpenseThisMonth = 0;
-
-    const monthlyMap: any = {};
+    let income = 0, expense = 0;
     const categoryMap: any = {};
     
     for (const t of this.transactions) {
@@ -88,16 +87,13 @@ export class DashboardComponent implements OnInit {
       // key is Month-Year, with month from 1-12
       const key = `${occurred_at.getMonth() + 1}-${occurred_at.getFullYear()}`;
       const amount = Number(t.amount);
-      if (!monthlyMap[key]) {
-        monthlyMap[key] = { income: 0, expense: 0 };
-      }
       
       if (t.type === 'income') {
+        income += amount;
         this.incomeThisMonth += amount;
-        monthlyMap[key].income += amount;
       } else {
         this.expensesThisMonth += amount;
-        monthlyMap[key].expense += amount;
+        expense += amount;
         if (occurred_at.getDate() === now.getDate()) {
           this.spentToday += amount;
         }
@@ -106,26 +102,14 @@ export class DashboardComponent implements OnInit {
         if (!categoryMap[category]) {
             categoryMap[category] = 0;
         }
-        if (now.getMonth() === occurred_at.getMonth() && now.getFullYear() === occurred_at.getFullYear()) {
-          categoryMap[category] += amount;
-        }
+
+        categoryMap[category] += amount;
         if (amount > this.maxExpenseThisMonth && 
             category !== ExpenseCategory.Economii && category !== ExpenseCategory.Rata) {
           this.maxExpenseThisMonth = amount;
           this.maxExpenseCategory = category;
         }
       }
-    }
-
-    this.monthlyLabels = Object.keys(monthlyMap);
-
-    this.monthlyIncome = this.monthlyLabels.map(
-      m => monthlyMap[m].income
-    );
-
-    this.monthlyExpenses = this.monthlyLabels.map(
-      m => monthlyMap[m].expense
-    );
 
     this.categoryLabels = Object.keys(categoryMap);
     this.categoryData = Object.values(categoryMap);
@@ -192,12 +176,13 @@ export class DashboardComponent implements OnInit {
       }
     ]
   };
+  }
 }
 async comparePastMonth() {
   const now = new Date();
   let startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   let endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  this.transactions = await this.transactionService.getTransactions(startDate, endDate, 'expense');
+  this.transactions = await this.transactionService.getTransactions(startDate, endDate);
 
   if (!this.transactions.length) return;
 

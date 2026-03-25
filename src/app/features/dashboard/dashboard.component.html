@@ -70,8 +70,8 @@
           <div
             class="progress-fill"
             [style.width.%]="budgetUsedPercent"
-            [class.danger]="budgetUsedPercent > 100"
-            [class.warning]="budgetUsedPercent > 80 && budgetUsedPercent <= 100"
+            [class.danger]="budgetUsedPercent > 90"
+            [class.warning]="budgetUsedPercent > 80 && budgetUsedPercent <= 90"
           ></div>
           <span>{{ budgetUsedPercent.toFixed(1) }}%</span>
         </div>
