@@ -78,7 +78,6 @@ export class DashboardComponent implements OnInit {
 
     this.expensesThisMonth = 0;
     this.maxExpenseThisMonth = 0;
-    let income = 0, expense = 0;
     const categoryMap: any = {};
     
     for (const t of this.transactions) {
@@ -89,11 +88,9 @@ export class DashboardComponent implements OnInit {
       const amount = Number(t.amount);
       
       if (t.type === 'income') {
-        income += amount;
         this.incomeThisMonth += amount;
       } else {
         this.expensesThisMonth += amount;
-        expense += amount;
         if (occurred_at.getDate() === now.getDate()) {
           this.spentToday += amount;
         }
@@ -178,6 +175,7 @@ export class DashboardComponent implements OnInit {
   };
   }
 }
+
 async comparePastMonth() {
   const now = new Date();
   let startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);

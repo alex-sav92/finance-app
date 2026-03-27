@@ -80,7 +80,7 @@
       </div>
       <div class="insight-item">
         <span>Daily Budget</span>
-        <strong>{{ dailyBudget | userCurrency }} <span *ngIf="dailyBudget > spentToday">✅</span></strong>
+        <strong>{{ dailyBudget | userCurrency }} <span *ngIf="dailyBudget > spentToday">✅ ({{spentToday}})</span></strong>
       </div>
       <div class="insight-item">
         <span>Biggest elective expense this month</span>
