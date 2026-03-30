@@ -51,7 +51,7 @@
         <span>This Month</span>
         <strong>{{ expensesThisMonth | userCurrency }}</strong>
       </div>
-      <div class="insight-item">
+      <div class="insight-item" *ngIf="this.monthlyBudget > 0">
         <span>Monthly Budget</span>
         <strong
           [class.over-budget]="monthlyBudget < 0"

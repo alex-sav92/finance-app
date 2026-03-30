@@ -122,3 +122,4 @@ export class TransactionService {
       account_id: account_id
     });
 }
+}
