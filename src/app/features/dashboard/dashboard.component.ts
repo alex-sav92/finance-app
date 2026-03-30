@@ -250,13 +250,18 @@ async comparePastMonth() {
       const daysLeft = lastDayThisMonth - now.getDate() + 1; // add one for current day
       this.dailyBudget = daysLeft > 0 ? this.budgetRemaining / daysLeft : 0;
       // budget streak 
-      if (this.spentToday < this.dailyBudget && now > this.last_update_streak) {
-        this.days_in_budget = (this.days_in_budget || 0) + 1;
+      if (now > this.last_update_streak) {
+        if (this.spentToday <= this.dailyBudget){
+          this.days_in_budget = (this.days_in_budget || 0) + 1;
+        }
+        else {
+          this.days_in_budget = 0;
+        } 
         this.last_update_streak = now;
 
         let { data } = await this.preferencesService.getPreferences();
         data.days_in_budget = this.days_in_budget;
-        data.last_update_streak = this.last_update_streak;
+        data.last_update_streak = now;
         
         await this.preferencesService.updatePreferences(data);
       }
