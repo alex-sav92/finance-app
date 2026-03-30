@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../categories/categories.service';
 import { AccountsService } from '../accounts/accounts.service';
 import { CommonModule } from '@angular/common';
+import { TransactionService } from '../../services/transaction.service';
 @Component({
   selector: 'app-preferences',
   imports: [FormsModule, CommonModule],
@@ -23,7 +24,7 @@ export class PreferencesComponent {
   };
 
   constructor(private preferencesService: PreferencesService, private categoriesService: CategoriesService, 
-    private accountsService: AccountsService){}
+    private accountsService: AccountsService, private transactionService: TransactionService){}
 
   async ngOnInit() {
     const { data } = await this.preferencesService.getPreferences();
@@ -37,6 +38,10 @@ export class PreferencesComponent {
 
   async save() {
     await this.preferencesService.updatePreferences(this.preferences);
+  }
+
+  async closeMonth(){
+    await this.transactionService.closeMonth();
   }
 
 }
