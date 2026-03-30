@@ -50,6 +50,8 @@ export class DashboardComponent implements OnInit {
   chartOptions: any = {};
   spentToday: number = 0;
   show_budget: boolean = false;
+  last_update_streak: Date = new Date();
+  days_in_budget: number = 0;
 
   constructor(
     private accountsService: AccountService,
@@ -67,7 +69,7 @@ export class DashboardComponent implements OnInit {
     this.accounts = await this.accountsService.getAccounts();
     
     await this.calculateMonthStats();
-    this.comparePastMonth();
+    await this.comparePastMonth();
     this.calculateBudgets();
   }
 
@@ -237,7 +239,7 @@ async comparePastMonth() {
     }).filter(Boolean) // remove nulls;
   }
 
-  calculateBudgets() {
+  async calculateBudgets() {
     const now = new Date();
     if (this.show_budget && this.monthlyBudget > 0) {
       this.budgetRemaining = this.monthlyBudget - this.expensesThisMonth;
@@ -247,6 +249,17 @@ async comparePastMonth() {
       if (now.getMonth() === 1) lastDayThisMonth = 28;
       const daysLeft = lastDayThisMonth - now.getDate() + 1; // add one for current day
       this.dailyBudget = daysLeft > 0 ? this.budgetRemaining / daysLeft : 0;
+      // budget streak 
+      if (this.spentToday < this.dailyBudget && now > this.last_update_streak) {
+        this.days_in_budget = (this.days_in_budget || 0) + 1;
+        this.last_update_streak = now;
+
+        let { data } = await this.preferencesService.getPreferences();
+        data.days_in_budget = this.days_in_budget;
+        data.last_update_streak = this.last_update_streak;
+        
+        await this.preferencesService.updatePreferences(data);
+      }
 
       this.budgetUsedPercent =
         (this.expensesThisMonth / this.monthlyBudget) * 100;
@@ -260,6 +273,12 @@ async comparePastMonth() {
       if (data?.monthly_budget) {
         this.monthlyBudget = Number(data.monthly_budget);
       }
+    }
+    if (data?.last_update_streak){
+      this.last_update_streak = new Date(data.last_update_streak);
+    }
+    if (data?.days_in_budget){
+      this.days_in_budget = Number(data.days_in_budget);
     }
   }
 }

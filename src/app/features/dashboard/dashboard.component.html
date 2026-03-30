@@ -82,6 +82,9 @@
         <span>Daily Budget</span>
         <strong>{{ dailyBudget | userCurrency }} <span *ngIf="dailyBudget > spentToday">✅ ({{spentToday}})</span></strong>
       </div>
+      <div class="insight-item" *ngIf="this.days_in_budget > 0">
+        <p><strong>🎉Congrats!</strong> You've stayed within your daily budget for <strong><span class="positive">{{ days_in_budget }} days</span></strong></p>
+      </div>
       <div class="insight-item">
         <span>Biggest elective expense this month</span>
         <strong>{{ maxExpenseThisMonth | userCurrency }} ({{ maxExpenseCategory }})</strong>
