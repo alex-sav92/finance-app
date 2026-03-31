@@ -1,5 +1,5 @@
 <div class="page">
-
+  
   <h2>Transactions</h2>
   <div class="card filters-card">
     <h3>Filter</h3>
@@ -111,4 +111,5 @@
       </div>
     </div>
   </div>
+  <h4 *ngIf="sumfiltered > 0">Sum filtered: {{ sumfiltered | userCurrency }}</h4>
 </div>
