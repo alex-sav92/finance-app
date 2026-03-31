@@ -24,12 +24,16 @@
 
 .nav a {
   text-decoration: none;
-  color: #475569;
-  font-weight: 500;
+  color: white;
+  background-color: #6366f1;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 .nav a:hover {
-  color: #3b82f6;
+  background: #4f46e5;
+  transform: translateY(-1px);
 }
 
 .logout-btn {
@@ -62,5 +66,8 @@
   .header {
     flex-direction: column;
     align-items: flex-start;
+  }
+  .nav {
+    flex-wrap: wrap;
   }
 }
