@@ -42,9 +42,6 @@ export class TransactionListComponent implements OnInit {
   }
   applyFilters() {
     this.transactionsFiltered = this.transactions.filter((tx: any) => {
-      if (tx.type !== 'expense') {
-        return false;
-      }
       if (this.filters.categoryId && tx.category_id !== this.filters.categoryId){
         return false;
       }
