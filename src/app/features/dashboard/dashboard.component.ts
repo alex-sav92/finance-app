@@ -228,15 +228,22 @@ async comparePastMonth() {
       if (!current || !previous) return null;   // remove missing data
       
       const diff = current - previous;
-      const percentChange = diff > 0 ? '+' +(diff / previous * 100).toFixed(1) : ((diff / previous) * 100).toFixed(1);
+      let percentChange = diff > 0 ? 
+        '+' +(diff / previous * 100).toFixed(1) + '%' :
+        ((diff / previous) * 100).toFixed(1) + '%';
+      if (diff === 0) {
+        percentChange = '~';
+      }
+      
       return {
         category: cat,
         current,
         previous,
         diff,
-        percent: percentChange + '%'
+        percent: percentChange 
       };
     }).filter(Boolean) // remove nulls;
+    console.log(this.categoryComparison);
   }
 
   async calculateBudgets() {
