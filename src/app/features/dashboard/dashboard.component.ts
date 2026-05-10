@@ -68,12 +68,12 @@ export class DashboardComponent implements OnInit {
 
     this.accounts = await this.accountsService.getAccounts();
     
-    await this.calculateMonthStats();
+    await this.monthChart();
     await this.comparePastMonth();
     this.calculateBudgets();
   }
 
-  async calculateMonthStats() {
+  async monthChart() {
     const now = new Date();
     let startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
       const key = `${occurred_at.getMonth() + 1}-${occurred_at.getFullYear()}`;
       const amount = Number(t.amount);
       
-      if (t.type === 'income') {
+      if (t.type.toLowerCase() == 'income' || t.categories?.name === 'income') {
         this.incomeThisMonth += amount;
       } else {
         this.expensesThisMonth += amount;
@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
         }
 
         const category = t.categories?.name ?? 'Other';
+        
         if (!categoryMap[category]) {
             categoryMap[category] = 0;
         }
@@ -110,6 +111,7 @@ export class DashboardComponent implements OnInit {
           this.maxExpenseCategory = category;
         }
       }
+    }
 
     this.categoryLabels = Object.keys(categoryMap);
     this.categoryData = Object.values(categoryMap);
@@ -177,7 +179,6 @@ export class DashboardComponent implements OnInit {
       ]
     };
   }
-}
 
 async comparePastMonth() {
     const now = new Date();
