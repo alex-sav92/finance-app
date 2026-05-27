@@ -156,10 +156,13 @@ export class DashboardComponent implements OnInit {
       '#06b6d4',
       '#3b82f6',
       '#8b5cf6', 
-      '#14b8a6',
+      '#f9acff',
+      '#185f80',
       '#64748b',
       '#3716b2', 
-      '#2b9b8e'
+      '#b0721a',
+      '#000000',
+      
     ];
     const shuffle = (arr: string[]) => {
       arr.sort(() => Math.random() - 0.5);
