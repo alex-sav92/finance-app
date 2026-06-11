@@ -108,7 +108,10 @@ export class TransactionListComponent implements OnInit {
       return;
     }
     await this.transactionService.deleteTransaction(id);
-    this.transactions = this.transactions.filter((tx: any) => tx.id !== id);
+    
+    this.transactions = await this.transactionService.getTransactions();
+    this.transactionsFiltered = this.transactions;
+    this.applyFilters();
   }
 
   async startEdit(tx: any) {
@@ -117,14 +120,18 @@ export class TransactionListComponent implements OnInit {
     this.editCategoryId = tx.category_id;
     this.editNote = tx.note || '';
   }
+
   cancelEdit(){
     this.editingTransactionId = null;
   }
+
   async saveEdit(tx:any) {
-    this.transactionService.updateTransaction(tx.id, this.editAmount!, this.editCategoryId!, this.editNote);
+    await this.transactionService.updateTransaction(tx.id, this.editAmount!, this.editCategoryId!, this.editNote);
     this.editingTransactionId = null;
     //refresh list
     this.transactions = await this.transactionService.getTransactions();
+    this.transactionsFiltered = this.transactions;
+    this.applyFilters();
   }
 
   clearFilters() {
