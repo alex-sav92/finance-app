@@ -1,0 +1,28 @@
+.summary {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summary-card {
+  flex: 1;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.installments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.installments-table th,
+.installments-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.installments-table tr:hover {
+  background: #f8fafc;
+}

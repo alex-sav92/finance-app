@@ -1,0 +1,62 @@
+<div class="card">
+
+  <h2>Credit Management</h2>
+
+  <div class="summary">
+
+    <div class="summary-card">
+      <span>Remaining to pay Total: </span>
+      <strong>{{ sumLeftToPay | userCurrency }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Remaining to pay Principal Only: </span>
+      <strong>{{ sumLeftToPayPrincipalOnly | userCurrency }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Count months left: </span>
+      <strong>{{ countLeftToPay }}</strong>
+    </div>
+
+  </div>
+
+  <table class="installments-table">
+    <thead>
+      <tr>
+        <th>Due Date</th>
+        <th>Amount</th>
+        <th>Principal</th>
+        <th>Interest</th>
+        <th>Insurance</th>
+        <th>Paid</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let installment of installments">
+
+        <td>{{ installment.due_date }}</td>
+
+        <td>{{ installment.amount + installment.insurance | userCurrency }}</td>
+
+        <td>{{ installment.principal_part | userCurrency }}</td>
+
+        <td>{{ installment.amount - installment.principal_part | userCurrency }}</td>
+
+        <td>{{ installment.insurance | userCurrency }}</td>
+        <td>
+          <input
+            type="checkbox"
+            [(ngModel)]="installment.paid"
+            (change)="togglePaid(installment)">
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
