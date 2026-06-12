@@ -26,3 +26,61 @@
 .installments-table tr:hover {
   background: #f8fafc;
 }
+.tips-section {
+  margin-bottom: 20px;
+}
+
+.tips-section h3 {
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.tip-card {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: #f9fafb;
+  transition: transform 0.2s ease;
+}
+
+.tip-card:hover {
+  transform: translateY(-2px);
+}
+
+.tip-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tip-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #4b5563;
+}
+.tip-card.blue {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.tip-card.green {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.tip-card.amber {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.tip-card.purple {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+.font-bold {
+  font-weight: 600;
+}

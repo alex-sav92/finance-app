@@ -18,8 +18,27 @@
       <span>Count months left: </span>
       <strong>{{ countLeftToPay }}</strong>
     </div>
+  </div>
+  <div class="tips-grid">
+
+    <div class="tip-card blue">
+      <strong>Reduce 1 month</strong>
+      <p>Pay <span class="font-bold">{{nextMonthPrincipal | userCurrency}}</span> to save <span class="font-bold">{{nextMonthTotal - nextMonthPrincipal | userCurrency}}</span> from next installment and remain with {{countLeftToPay - 1}} months.</p>
+    </div>
+
+    <div class="tip-card green">
+      <strong>Reduce 2 months</strong>
+      <p>Pay <span class="font-bold">{{next2MonthsPrincipal | userCurrency}}</span> to save <span class="font-bold">{{next2MonthsTotal - next2MonthsPrincipal | userCurrency}}</span> from the next two installments and remain with {{countLeftToPay - 2}} months.</p>
+    </div>
+
+    <div class="tip-card amber">
+      <strong>Reduce 4 months</strong>
+      <p>Pay <span class="font-bold">{{next4MonthsPrincipal | userCurrency}}</span> to save <span class="font-bold">{{next4MonthsTotal - next4MonthsPrincipal | userCurrency}}</span> from the next four installments and remain with {{countLeftToPay - 4}} months.</p>
+    </div>
 
   </div>
+
+</div>
 
   <table class="installments-table">
     <thead>
@@ -58,5 +77,4 @@
     </tbody>
 
   </table>
-
 </div>
