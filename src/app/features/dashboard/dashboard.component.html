@@ -87,6 +87,15 @@
         <strong>{{ maxExpenseThisMonth | userCurrency }} ({{ maxExpenseCategory }})</strong>
       </div>
     </div>
+    <div class="card white">
+      <h3>Detailed breakdown</h3>
+      <p>Days with zero spending this  month: {{ zero_spent_days }}</p>
+      <h4>Top 3 elective expenses this month:</h4>
+      <div *ngFor="let tx of top3ElectiveTransactions">
+        {{ tx.amount | userCurrency }} - {{ tx.categories?.name }}
+      </div>
+    </div>
+    
 
   </div>
 </div>

@@ -1,4 +1,5 @@
 export enum ExpenseCategory {
   Economii = "Economii",
-  Rata = "RataCredit"
+  Rata = "RataCredit",
+  Food = "Food"
 }

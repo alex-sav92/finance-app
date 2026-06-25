@@ -52,6 +52,8 @@ export class DashboardComponent implements OnInit {
   show_budget: boolean = false;
   last_update_streak: Date = new Date();
   days_in_budget: number = 0;
+  zero_spent_days: number = 0;
+  top3ElectiveTransactions: any[] = [];
 
   constructor(
     private accountsService: AccountService,
@@ -81,6 +83,15 @@ export class DashboardComponent implements OnInit {
 
     this.expensesThisMonth = 0;
     this.maxExpenseThisMonth = 0;
+    const datesWithTransactions = new Set(
+      this.transactions.map((t: any) => t.occurred_at)
+    );
+    const daysElapsed = today.getDate();
+
+    this.zero_spent_days = daysElapsed - datesWithTransactions.size;
+
+    this.top3ElectiveTransactions = this.setTop3ElectiveTransactions();
+    console.log('Top 3 elective transactions:', this.top3ElectiveTransactions);
     const categoryMap: any = {};
     
     for (const t of this.transactions) {
@@ -280,6 +291,42 @@ async comparePastMonth() {
       this.budgetUsedPercent =
         (this.expensesThisMonth / this.monthlyBudget) * 100;
     }
+  }
+
+  groceriesStats() {
+    const groceries = this.transactions.filter(
+      (t: any) => t.category_name === ExpenseCategory.Food && t.note.toLowerCase().includes('groceries')
+    );
+
+    return {
+      total: groceries.reduce(
+        (sum: number, t: any) => sum + t.amount,
+        0
+      ),
+      count: groceries.length
+    };
+  }
+  eatingOutStats() {
+    const eatOut = this.transactions.filter(
+      (t: any) => t.category_name === ExpenseCategory.Food && t.note.toLowerCase().includes('oras')
+    );
+
+    return {
+      total: eatOut.reduce(
+        (sum: number, t: any) => sum + t.amount,
+        0
+      ),
+      count: eatOut.length
+    };
+  }
+
+  setTop3ElectiveTransactions() {
+    return this.transactions
+      .filter((t: any) => t.type === 'expense' && 
+      t.categories?.name !== ExpenseCategory.Economii && 
+      t.categories?.name !== ExpenseCategory.Rata)
+      .sort((a: any, b: any) => b.amount - a.amount)
+      .slice(0, 3);
   }
 
   async loadPreferences() {
