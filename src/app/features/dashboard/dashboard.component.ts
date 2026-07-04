@@ -54,6 +54,9 @@ export class DashboardComponent implements OnInit {
   days_in_budget: number = 0;
   zero_spent_days: number = 0;
   top3ElectiveTransactions: any[] = [];
+  totalEatingOut: number = 0;
+  totalGroceries: number = 0;
+  totalFood: number = 0;
 
   constructor(
     private accountsService: AccountService,
@@ -83,6 +86,7 @@ export class DashboardComponent implements OnInit {
 
     this.expensesThisMonth = 0;
     this.maxExpenseThisMonth = 0;
+    //Days with no spending
     const datesWithTransactions = new Set(
       this.transactions.map((t: any) => t.occurred_at)
     );
@@ -91,7 +95,8 @@ export class DashboardComponent implements OnInit {
     this.zero_spent_days = daysElapsed - datesWithTransactions.size;
 
     this.top3ElectiveTransactions = this.setTop3ElectiveTransactions();
-    console.log('Top 3 elective transactions:', this.top3ElectiveTransactions);
+
+    
     const categoryMap: any = {};
     
     for (const t of this.transactions) {
@@ -121,9 +126,13 @@ export class DashboardComponent implements OnInit {
           this.maxExpenseThisMonth = amount;
           this.maxExpenseCategory = category;
         }
+        if (category === ExpenseCategory.Food) {
+          this.totalFood += amount;
+          this.totalGroceries += t.note.toLowerCase().includes('groceries') ? amount : 0;
+          this.totalEatingOut += t.note.toLowerCase().includes('oras') ? amount : 0;
+        }
       }
     }
-
     this.categoryLabels = Object.keys(categoryMap);
     this.categoryData = Object.values(categoryMap);
 
@@ -193,7 +202,7 @@ export class DashboardComponent implements OnInit {
       ]
     };
   }
-
+  
 async comparePastMonth() {
     const now = new Date();
     let startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
@@ -291,33 +300,6 @@ async comparePastMonth() {
       this.budgetUsedPercent =
         (this.expensesThisMonth / this.monthlyBudget) * 100;
     }
-  }
-
-  groceriesStats() {
-    const groceries = this.transactions.filter(
-      (t: any) => t.category_name === ExpenseCategory.Food && t.note.toLowerCase().includes('groceries')
-    );
-
-    return {
-      total: groceries.reduce(
-        (sum: number, t: any) => sum + t.amount,
-        0
-      ),
-      count: groceries.length
-    };
-  }
-  eatingOutStats() {
-    const eatOut = this.transactions.filter(
-      (t: any) => t.category_name === ExpenseCategory.Food && t.note.toLowerCase().includes('oras')
-    );
-
-    return {
-      total: eatOut.reduce(
-        (sum: number, t: any) => sum + t.amount,
-        0
-      ),
-      count: eatOut.length
-    };
   }
 
   setTop3ElectiveTransactions() {

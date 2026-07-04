@@ -94,6 +94,9 @@
       <div *ngFor="let tx of top3ElectiveTransactions">
         {{ tx.amount | userCurrency }} - {{ tx.categories?.name }}
       </div>
+      <h3>Split of the food</h3>
+      <p>Groceries: {{ totalGroceries | userCurrency }} ({{totalGroceries / totalFood * 100 | number:'1.1-2'}}%)</p>
+      <p>Eating Out: {{ totalEatingOut | userCurrency }} ({{totalEatingOut / totalFood * 100 | number:'1.1-2'}}%)</p>
     </div>
     
 
