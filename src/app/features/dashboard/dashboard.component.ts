@@ -306,7 +306,11 @@ async comparePastMonth() {
     return this.transactions
       .filter((t: any) => t.type === 'expense' && 
       t.categories?.name !== ExpenseCategory.Economii && 
-      t.categories?.name !== ExpenseCategory.Rata)
+      t.categories?.name !== ExpenseCategory.Rata &&
+      t.categories?.name !== ExpenseCategory.Facturi &&
+      t.note?.toLowerCase().includes('gym') === false &&
+      t.note?.toLowerCase().includes('calmly') === false
+      )
       .sort((a: any, b: any) => b.amount - a.amount)
       .slice(0, 3);
   }
