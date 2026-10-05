@@ -6,6 +6,7 @@ import { TransactionListComponent } from './features/transactions/transaction-li
 import { AddTransactionComponent } from './features/transactions/add-transaction/add-transaction.component';
 import { PreferencesComponent } from './features/preferences/preferences.component';
 import { CreditManagementComponent } from './features/credit/credit-management/credit-management.component';
+import { MonthlyReportComponent } from './features/monthly-report/monthly-report.component';
 
 export const routes: Routes = [
   { path: '', component: AddTransactionComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
   { path: 'preferences', component: PreferencesComponent},
-  { path: 'credit-management', component: CreditManagementComponent }
+  { path: 'credit-management', component: CreditManagementComponent },
+  { path: 'monthly-report', component: MonthlyReportComponent }
 ];

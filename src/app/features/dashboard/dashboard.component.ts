@@ -330,4 +330,132 @@ async comparePastMonth() {
       this.days_in_budget = Number(data.days_in_budget);
     }
   }
+
+async generateMonthReport(year: number, month: number) {
+
+  // month is 1-12 here
+  const startOfMonth = new Date(year, month - 1, 1);
+
+  // Last day of selected month
+  const endOfMonth = new Date(year, month, 0);
+
+  this.transactions = await this.transactionService.getTransactions(
+    startOfMonth,
+    endOfMonth
+  );
+
+  // Reset calculated values
+  this.expensesThisMonth = 0;
+  this.incomeThisMonth = 0;
+  this.spentToday = 0;
+  this.maxExpenseThisMonth = 0;
+  this.maxExpenseCategory = '';
+  this.totalFood = 0;
+  this.totalGroceries = 0;
+  this.totalEatingOut = 0;
+
+  // Days with no spending
+  const datesWithTransactions = new Set(
+    this.transactions.map((t: any) => t.occurred_at)
+  );
+
+  const daysInMonth = endOfMonth.getDate();
+
+  this.zero_spent_days =
+    daysInMonth - datesWithTransactions.size;
+
+  // Top 3 elective transactions
+  this.top3ElectiveTransactions =
+    this.setTop3ElectiveTransactions();
+
+  // Categories
+  const categoryMap: any = {};
+
+  for (const t of this.transactions) {
+
+    const occurredAt = new Date(
+      Date.parse(t.occurred_at)
+    );
+
+    const amount = Number(t.amount);
+
+    if (
+      t.type?.toLowerCase() === 'income' ||
+      t.categories?.name === 'income'
+    ) {
+      this.incomeThisMonth += amount;
+      continue;
+    }
+
+    this.expensesThisMonth += amount;
+
+    const category =
+      t.categories?.name ?? 'Other';
+
+    if (!categoryMap[category]) {
+      categoryMap[category] = 0;
+    }
+
+    categoryMap[category] += amount;
+
+    // Largest expense
+    if (
+      amount > this.maxExpenseThisMonth &&
+      category !== ExpenseCategory.Economii &&
+      category !== ExpenseCategory.Rata
+    ) {
+      this.maxExpenseThisMonth = amount;
+      this.maxExpenseCategory = category;
+    }
+
+    // Food
+    if (category === ExpenseCategory.Food) {
+
+      this.totalFood += amount;
+
+      const note =
+        (t.note ?? '').toLowerCase();
+
+      if (note.includes('groceries')) {
+        this.totalGroceries += amount;
+      }
+
+      if (note.includes('oras')) {
+        this.totalEatingOut += amount;
+      }
+    }
+  }
+
+  // Pie chart data
+  this.categoryLabels =
+    Object.keys(categoryMap);
+
+  this.categoryData =
+    Object.values(categoryMap);
+
+  const sumSpending =
+    this.categoryData.reduce(
+      (a: number, b: number) => a + b,
+      0
+    );
+
+  this.categoryPercentages =
+    this.categoryData.map(
+      (d: number) => (d / sumSpending) * 100
+    );
+
+  this.pieChartData = {
+    labels: this.categoryLabels,
+    datasets: [
+      {
+        data: this.categoryData,
+        backgroundColor: this.categoryColors,
+        borderWidth: 2,
+        borderRadius: 6,
+        spacing: 4
+      }
+    ]
+  };
+}
+
 }

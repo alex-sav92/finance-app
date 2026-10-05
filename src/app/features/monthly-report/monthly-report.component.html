@@ -1,0 +1,123 @@
+<div class="monthly-report">
+
+  <button
+    class="export-button"
+    (click)="exportToPdf()">
+    Export PDF
+  </button>
+
+  <div #reportContent class="report-content">
+
+    <h1>Monthly Report</h1>
+
+  <div class="report-selector">
+
+    <div class="form-group">
+      <label for="month">Month</label>
+
+      <select
+        id="month"
+        [(ngModel)]="selectedMonth"
+        (change)="loadReport()">
+        <option
+          *ngFor="let month of months"
+          [ngValue]="month.value">
+          {{ month.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Year</label>
+
+      <select
+        id="year"
+        [(ngModel)]="selectedYear"
+        (change)="loadReport()">
+        <option
+          *ngFor="let year of years"
+          [ngValue]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
+<div class="summary-cards">
+
+  <div class="summary-card income">
+    <div class="summary-label">Income</div>
+    <div class="summary-value">
+      {{ totalIncome | number:'1.2-2' }}
+    </div>
+  </div>
+
+  <div class="summary-card expenses">
+    <div class="summary-label">Expenses</div>
+    <div class="summary-value">
+      {{ totalExpenses | number:'1.2-2' }}
+    </div>
+  </div>
+
+  <div class="summary-card transactions">
+    <div class="summary-label">Transactions</div>
+    <div class="summary-value">
+      {{ transactionCount }}
+    </div>
+  </div>
+
+</div>
+  </div>
+
+<div class="category-section">
+
+  <div class="chart-card">
+
+    <h2>Expenses by category</h2>
+
+    <div class="chart-container">
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [options]="chartOptions"
+        [type]="'pie'">
+      </canvas>
+    </div>
+
+  </div>
+
+  <div class="category-list-card">
+
+    <h2>Category amounts</h2>
+
+    <div
+      class="category-row"
+      *ngFor="let category of categoryLabels; let i = index">
+
+      <span class="category-name">
+  <span
+    class="category-color"
+    [style.background-color]="categoryColors[i]">
+  </span>
+
+  {{ category }}
+</span>
+
+      <span class="category-amount">
+        {{ categoryData[i] | number:'1.2-2' }}
+      </span>
+
+    </div>
+
+    <div class="category-total">
+      <span>Total</span>
+
+      <span>
+        {{ totalExpenses | number:'1.2-2' }}
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+</div>
