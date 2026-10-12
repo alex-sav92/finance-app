@@ -19,13 +19,14 @@ export class AddTransactionComponent implements OnInit {
 
   accounts: any[] = [];
   categories: any[] = [];
+  filteredCategories: any[] = [];
 
   amount: number | null = null;
-  type: string = 'expense';
   selectedAccountId: string = '';
   categoryId: string = '';
   note: string = '';
   occurred_at: string = new Date().toISOString().substring(0, 10);
+  selectedTransactionType: string = 'expense';
 
   loading = false;
   message = '';
@@ -41,16 +42,29 @@ export class AddTransactionComponent implements OnInit {
   async ngOnInit() {
     this.accounts = await this.accountsService.getAccounts();
     this.categories = await this.categoriesService.getCategories();
+    this.filterCategories(this.selectedTransactionType);
+    this.setDefaultsFromPreferences();
+  }
+
+  filterCategories(type: string) {
+    const isIncome = type.toLowerCase() === 'income';
+
+    this.filteredCategories = this.categories.filter(
+      category => category.is_income === isIncome
+    );
     this.setDefaultsFromPreferences();
   }
 
   async setDefaultsFromPreferences() {
     const { data } = await this.preferencesService.getPreferences();
-    if (data?.default_category_id) {
+    if (data?.default_category_id && this.selectedTransactionType === 'expense') {
       const categoryExists = this.categories.find(c => c.id === data.default_category_id);
       if (categoryExists) {
         this.categoryId = categoryExists.id;
       }
+    }
+    if (this.selectedTransactionType.toLowerCase() === 'income') {
+      this.categoryId = this.categories.find(c => c.name.toLowerCase() === 'income')?.id || '';
     }
     if (data?.default_account_id) {
       const accountExists = this.accounts.find(c => c.id === data.default_account_id);
@@ -72,7 +86,7 @@ export class AddTransactionComponent implements OnInit {
     try {
       await this.transactionsService.createTransaction({
         amount: this.amount,
-        type: this.type,
+        type: this.selectedTransactionType,
         account_id: this.selectedAccountId,
         category_id: this.categoryId || null,
         note: this.note || null,
