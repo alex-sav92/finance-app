@@ -219,6 +219,8 @@ async comparePastMonth() {
     const categoryPreviousMonth: Record<string, number> = {};
 
     for (const tx of this.transactions) {
+      if (tx.type.toLowerCase() === 'income')
+        continue;
       const occurred_at = new Date(Date.parse(tx.occurred_at));
       // key is Month-Year, with month from 1-12
       const monthKey = `${occurred_at.getMonth()+1}-${occurred_at.getFullYear()}`;
